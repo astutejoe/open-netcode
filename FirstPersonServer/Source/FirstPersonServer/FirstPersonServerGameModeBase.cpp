@@ -318,7 +318,18 @@ void AFirstPersonServerGameModeBase::SpawnNewPlayers()
 		Player player;
 		new_players.Dequeue(player);
 
-		SpawnObject((uint8)ObjectClass::Player, PlayerPawn, player_spawn_location + FVector(0.0f, (100.0f * players_counter - 1), 0.0f), FRotator(0.0f, 0.0f, 0.0f), false, player.id);
+		AActor* player_actor_instance = SpawnObject((uint8)ObjectClass::Player, PlayerPawn, player_spawn_location + FVector(0.0f, (100.0f * players_counter - 1), 0.0f), FRotator(0.0f, 0.0f, 0.0f), false, player.id);
+
+		APlayerPawn* player_instance = Cast<APlayerPawn>(player_actor_instance);
+
+		TSubclassOf<AWeapon>* player_weapon_class = weapons_map.Find(0);
+
+		if (player_weapon_class != nullptr)
+		{
+			//as objects doesn't have begin plays nor tick we need to use a basic actor as the weapon
+			player_instance->weapon = GetWorld()->SpawnActor<AWeapon>(*player_weapon_class, FVector::ZeroVector, FRotator::ZeroRotator);
+			player_instance->weapon->ammo_count = player_instance->weapon->magazine_capacity;
+		}
 	}
 }
 

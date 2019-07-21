@@ -179,6 +179,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
 	UClass* PlayerPawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "DayDGameModeBase")
+	TMap<uint8, TSubclassOf<AWeapon>> weapons_map;
+
 private:
 	void CleanupPlayers();
 	void SpawnNewPlayers();

@@ -23,3 +23,13 @@ APlayerPawn::APlayerPawn()
 	weapon_component->SetupAttachment(camera);
 }
 
+void APlayerPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	weapon = Cast<AWeapon>(weapon_component->GetChildActor());
+	if (weapon != nullptr)
+	{
+		weapon->SetOwner(this);
+	}
+}

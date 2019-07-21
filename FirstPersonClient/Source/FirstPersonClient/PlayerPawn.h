@@ -13,6 +13,9 @@ class FIRSTPERSONCLIENT_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* capsule;
