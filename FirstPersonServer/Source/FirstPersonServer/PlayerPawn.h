@@ -23,16 +23,16 @@ class FIRSTPERSONSERVER_API APlayerPawn : public APawn
 
 public:
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, SimpleDisplay)
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* capsule;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, SimpleDisplay)
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* mesh;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, SimpleDisplay)
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* spine_reference;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, SimpleDisplay)
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* exit_location;
 
 	APlayerPawn();
