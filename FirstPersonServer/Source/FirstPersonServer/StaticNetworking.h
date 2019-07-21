@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Networking.h"
+#include "Networking/Public/Networking.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
 

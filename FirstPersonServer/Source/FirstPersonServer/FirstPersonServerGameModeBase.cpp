@@ -1,6 +1,10 @@
 #include "FirstPersonServerGameModeBase.h"
 #include "NavigationSystem.h"
 #include "DrawDebugHelpers.h"
+#include "Async/Async.h"
+#include "Containers/Queue.h"
+#include "Engine/World.h"
+#include "Engine/Engine.h"
 
 uint8 receive_buffer[MAX_BUFFER];
 

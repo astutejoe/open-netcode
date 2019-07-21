@@ -30,7 +30,7 @@ enum class PacketType : uint8
 };
 
 const unsigned short MAX_OBJECTS = 100;
-const unsigned short MAX_PLAYERS = 4;
+const unsigned short MAX_PLAYERS = 15;
 
 const unsigned short MAX_ACTIONS_PER_TICK = 10;
 const unsigned short MAX_INPUTS_PER_TICK = 10;
