@@ -17,7 +17,7 @@ AOnlinePawn::AOnlinePawn()
 	camera_reference->bEditableWhenInherited = true;
 	camera_reference->SetupAttachment(spine_reference);
 
-	weapon_component = CreateDefaultSubobject<UChildActorComponent>(TEXT("CAGAITA"));
+	weapon_component = CreateDefaultSubobject<UChildActorComponent>(TEXT("CAGAITA")); //really sorry about this, calling it Weapon was actually giving compile errors.
 	weapon_component->bEditableWhenInherited = true;
 	weapon_component->SetupAttachment(camera_reference);
 

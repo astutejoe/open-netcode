@@ -1,34 +1,25 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PlayerPawn.h"
 
-// Sets default values
 APlayerPawn::APlayerPawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	capsule->SetCapsuleHalfHeight(88.0f);
+	capsule->SetCapsuleRadius(34.0f);
+	SetRootComponent(capsule);
 
-}
+	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	mesh->SetupAttachment(capsule);
 
-// Called when the game starts or when spawned
-void APlayerPawn::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
+	spine_reference = CreateDefaultSubobject<USceneComponent>(TEXT("SpineReference"));
+	spine_reference->bEditableWhenInherited = true;
+	spine_reference->SetupAttachment(mesh);
 
-// Called every frame
-void APlayerPawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	camera->bEditableWhenInherited = true;
+	camera->SetupAttachment(spine_reference);
 
-}
-
-// Called to bind functionality to input
-void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	weapon_component = CreateDefaultSubobject<UChildActorComponent>(TEXT("CAGAITA")); //really sorry about this, calling it Weapon was actually giving compile errors.
+	weapon_component->bEditableWhenInherited = true;
+	weapon_component->SetupAttachment(camera);
 }
 
