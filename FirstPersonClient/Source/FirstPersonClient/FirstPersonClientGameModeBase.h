@@ -79,7 +79,7 @@ const unsigned short MAX_PLAYERS = 15;
 const unsigned short MAX_ACTIONS_PER_TICK = 10;
 const unsigned short MAX_JOIN_TRIES = 10;
 
-#define ONLINE 1
+#define ONLINE 0
 #define PRINT_DEBUG(MESSAGE) GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, MESSAGE, false)
 
 UENUM(BlueprintType)

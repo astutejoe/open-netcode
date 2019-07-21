@@ -56,7 +56,7 @@ void AOnlinePawn::EnableRagdoll()
 	mesh->SetSimulatePhysics(true);
 	mesh->SetAllBodiesSimulatePhysics(true);
 	mesh->WakeRigidBody();
-	mesh->SetCollisionProfileName("Floor");
+	mesh->SetCollisionProfileName("Ragdoll");
 
 	ragdoll = true;
 }
