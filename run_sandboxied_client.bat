@@ -1,0 +1,1 @@
+start "Window1" "C:\Program Files\Epic Games\UE_4.22\Engine\Binaries\Win64\UE4Editor.exe" "C:\Users\gabri\Documents\GitHub\open-netcode\FirstPersonClient\FirstPersonClient.uproject"  -game  -ResX=640 -ResY=360 -WinX=0 -WinY=0 -NoVSync -log -SaveToUserDir
