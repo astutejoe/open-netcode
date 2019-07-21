@@ -318,7 +318,7 @@ void AFirstPersonServerGameModeBase::SpawnNewPlayers()
 		Player player;
 		new_players.Dequeue(player);
 
-		SpawnObject((uint8)ObjectClass::Player, PlayerPawn, player_spawn_location + FVector(0.0f, (100.0f * players_counter - 1), 0.0f), FRotator(0.0f, 0.0f, 0.0f), false, false, player.id);
+		SpawnObject((uint8)ObjectClass::Player, PlayerPawn, player_spawn_location + FVector(0.0f, (100.0f * players_counter - 1), 0.0f), FRotator(0.0f, 0.0f, 0.0f), false, player.id);
 	}
 }
 
