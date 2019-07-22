@@ -19,7 +19,7 @@ APlayerPawn::APlayerPawn()
 	spine_reference->SetupAttachment(mesh);
 
 	exit_location = CreateDefaultSubobject<USceneComponent>(TEXT("ExitLocation"), true);
-	exit_location->SetRelativeLocation(FVector(3.317272, 14.969928, 27.174866));
+	exit_location->SetRelativeLocation(FVector(-22.000177, 47.999893, 36.000000));
 	exit_location->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 	exit_location->bEditableWhenInherited = true;
 	exit_location->SetupAttachment(spine_reference);

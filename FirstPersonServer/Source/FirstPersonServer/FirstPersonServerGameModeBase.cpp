@@ -573,7 +573,7 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 
 			APlayerPawn* try_cast_player = nullptr;
 
-			bool hit_something = GetWorld()->LineTraceSingleByChannel(hit_out, trace_start, trace_end, ECollisionChannel::ECC_Camera, trace_params);
+			bool hit_something = GetWorld()->LineTraceSingleByObjectType(hit_out, trace_start, trace_end, object_trace_params, trace_params);
 
 			if (hit_something && hit_out.Actor != nullptr && hit_out.Actor->IsValidLowLevel())
 			{
