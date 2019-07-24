@@ -5,6 +5,8 @@ Introduction
 ------
 Multiplayer games are and always will be very hard to develop, having in mind that out-of-the-box solutions are highly unoptimized and hard to configure, while developing your own netcode from scratch can be a project by itself.
 
+Having that in mind, it's a matter of firing up the server, then how many clients you wish.
+
 Objective
 ------
 The objective of this project is to develop a solid foundation for a [valve/quake networking model](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking) without over-generalization, that developers can use to bootstrap their multiplayer game.
