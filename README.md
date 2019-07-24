@@ -11,6 +11,12 @@ The objective of this project is to develop a solid foundation for a [valve/quak
 
 **It's not meant to be a plug-in where you check a few boxes and your game is now networked.** The objective of this project is providing a starting point to estabilish the code base, this approach helps the code itself be easy to understand and extremely resource efficient (network bandwidth, CPU and latency).
 
+Installation
+------
+Just like any regular Unreal Engine project would require:
+- [Unreal Engine](https://docs.unrealengine.com/en-US/GettingStarted/Installation/index.html)
+- [Visual Studio](https://docs.unrealengine.com/en-US/Programming/Development/VisualStudioSetup/index.html)
+
 Basic Instructions
 ------
 Due to the threaded nature of the socket system one simple can't play in the editor, one needs to play as a standalone game. Unreal Engine has problems dealing with the threads created during runtime, not killing them when stopping the game, this causes the threads to accumulate and crashing the engine for multiple reasons.
