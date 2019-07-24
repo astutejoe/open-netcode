@@ -5,13 +5,17 @@ Introduction
 ------
 Multiplayer games are and always will be very hard to develop, having in mind that out-of-the-box solutions are highly unoptimized and hard to configure, while developing your own netcode from scratch can be a project by itself.
 
-Having that in mind, it's a matter of firing up the server, then how many clients you wish.
-
 Objective
 ------
 The objective of this project is to develop a solid foundation for a [valve/quake networking model](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking) without over-generalization, that developers can use to bootstrap their multiplayer game.
 
 **It's not meant to be a plug-in where you check a few boxes and your game is now networked.** The objective of this project is providing a starting point to estabilish the code base, this approach helps the code itself be easy to understand and extremely resource efficient (network bandwidth, CPU and latency).
+
+Basic Instructions
+------
+Due to the threaded nature of the socket system one simple can't play in the editor, one needs to play as a standalone game. Unreal Engine has problems dealing with the threads created during runtime, not killing them when stopping the game, this causes the threads to accumulate and crashing the engine for multiple reasons.
+
+Having that in mind, it's a matter of firing up the server, then how many clients you wish.
 
 Folder Structure and Files
 ------
