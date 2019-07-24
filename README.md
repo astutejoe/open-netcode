@@ -11,11 +11,13 @@ The objective of this project is to develop a solid foundation for a [valve/quak
 
 **It's not meant to be a plug-in where you check a few boxes and your game is now networked.** The objective of this project is providing a starting point to estabilish the code base, this approach helps the code itself be easy to understand and extremely resource efficient (network bandwidth, CPU and latency).
 
-Folder Structure
+Folder Structure and Files
 ------
-We're including in this repository a range of netcode models, each netcode model will have two folders, the server and the client. We're starting with a first person shooter model, so we have now two folders. Inside each folder is a common Unreal Engine 4 Project:
-- First Person Client
-- First Person Server
+We're including in this repository a range of netcode models, each netcode model will have two folders, the server and the client. We're starting with a first person shooter model, so we have now two folders. Inside each folder is a common Unreal Engine 4 Project.
+- FirstPersonClient: First person shooter model client
+- FirstPersonServer: First person shooter model server
+- run_2_clients.bat: Example bat script on how to fire up two client windows without having to open multiple engines.
+- run_sandboxied_client.bat: Example bat script on how to fire up one client window without having to open multiple engines.
 
 Networking  Top-Level Specifications
 ------
