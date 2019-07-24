@@ -24,3 +24,4 @@ Networking  Top-Level Specifications
 - Server Tick Rate: Fixed Configurable
 - Client Tick Rate: Variable
 - Sockets Library: [Unreal Multi-Platform Socket Subsystem](https://api.unrealengine.com/INT/API/Runtime/Sockets/ISocketSubsystem/index.html)
+- Sockets Implementation: Threaded with blocking calls.
