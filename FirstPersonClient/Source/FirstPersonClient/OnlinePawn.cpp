@@ -51,29 +51,6 @@ void AOnlinePawn::Reload()
 	PlayerReloaded();
 }
 
-void AOnlinePawn::EnableRagdoll()
-{
-	mesh->SetSimulatePhysics(true);
-	mesh->SetAllBodiesSimulatePhysics(true);
-	mesh->WakeRigidBody();
-	mesh->SetCollisionProfileName("Ragdoll");
-
-	ragdoll = true;
-}
-
-void AOnlinePawn::DisableRagdoll()
-{
-	mesh->SetSimulatePhysics(false);
-	mesh->SetAllBodiesSimulatePhysics(false);
-	mesh->PutRigidBodyToSleep();
-	mesh->SetCollisionProfileName("NoCollision");
-
-	mesh->SetRelativeLocation(FVector(0.0f, 0.0f, -88.0f));
-	mesh->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
-	ragdoll = false;
-}
-
 void AOnlinePawn::Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads)
 {
 	target_location = location;

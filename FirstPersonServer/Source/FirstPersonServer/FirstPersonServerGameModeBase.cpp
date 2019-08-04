@@ -261,8 +261,10 @@ AActor* AFirstPersonServerGameModeBase::SpawnObject(uint8 class_id, UClass* obje
 
 	if (class_id == (uint8)ObjectClass::Player)
 	{
-		Cast<APlayerPawn>(objects_instances[objects_counter].instance)->SpawnDefaultController();
-		Cast<APlayerPawn>(objects_instances[objects_counter].instance)->health = health;
+		APlayerPawn* player_instance = Cast<APlayerPawn>(objects_instances[objects_counter].instance);
+		player_instance->SpawnDefaultController();
+		player_instance->health = health;
+		player_instance->object_id = id;
 	}
 
 	objects_counter++;
@@ -589,7 +591,11 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 
 				if (try_cast_player != nullptr)
 				{
-					try_cast_player->Hit(50.0f);//pending complex damage system
+					if (try_cast_player->health > 0.0f)
+					{
+						try_cast_player->Hit(50.0f);//pending complex damage system
+					}
+
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, hit_out.BoneName.ToString(), true);
 				}
 			}
@@ -630,7 +636,7 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 					memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Yaw, sizeof(float));
 					memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Roll, sizeof(float));
 
-					StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Hit, 0, data_length, data, players[j].connection);
+					StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Hit, try_cast_player->object_id, data_length, data, players[j].connection);
 				}
 			}
 

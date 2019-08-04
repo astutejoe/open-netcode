@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Direction = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Health = 100.0f;
+
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 

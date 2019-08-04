@@ -50,6 +50,8 @@ public:
 
 	AWeapon* weapon;
 
+	int32 object_id;
+
 	float respawn_counter = respawn_time;
 
 	void MoveForward(float value);

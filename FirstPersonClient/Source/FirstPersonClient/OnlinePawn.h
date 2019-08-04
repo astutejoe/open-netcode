@@ -48,8 +48,6 @@ public:
 
 	void Fire();
 	void Reload();
-	void EnableRagdoll();
-	void DisableRagdoll();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool ads = false;
@@ -62,7 +60,6 @@ public:
 	FRotator target_rotation;
 
 	bool grounded = true;
-	float health;
+	float health = 100.0f;
 	FVector velocity;
-	bool ragdoll;
 };

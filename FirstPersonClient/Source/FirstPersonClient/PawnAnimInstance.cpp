@@ -24,6 +24,7 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		Direction = CalculateDirection(Owner->velocity, FRotator::ZeroRotator);
 		bIsGrounded = Owner->grounded;
 		bIsAiming = Owner->ads;
+		Health = Owner->health;
 
 		if (Owner->weapon != nullptr)
 			bIsReloading = Owner->weapon->reloading;
