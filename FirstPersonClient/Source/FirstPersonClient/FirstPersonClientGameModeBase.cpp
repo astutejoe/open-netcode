@@ -314,6 +314,16 @@ void AFirstPersonClientGameModeBase::Tick(float DeltaTime)
 				FTransform emit_transform = FTransform(emit_rotation, emit_location);
 
 				//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), hit_blood_effect, emit_transform, true);
+
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Player %u got hit"), action.object_id), true);
+				for (int j = 0; j < objects_instances_counter; j++)
+				{
+					if (objects_instances[j].id == action.object_id)
+					{
+						Cast<AOnlinePawn>(objects_instances[j].instance)->PlayerGotHit();
+						break;
+					}
+				}
 				break;
 			}
 			}

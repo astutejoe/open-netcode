@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PlayerReloaded();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PlayerGotHit();
+
 	AWeapon* weapon;
 
 	AOnlinePawn();
@@ -48,15 +51,11 @@ public:
 	void EnableRagdoll();
 	void DisableRagdoll();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool ads = false;
-	bool interpolate_weapon_location = false;
-	FVector weapon_hipfire_location;
-	FVector weapon_ads_location = FVector(5.999996, 25.999794, 41.0);
-	FVector weapon_target_location;
 
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = "OnlinePawn")
 	virtual void Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads);
 
 	FVector target_location;

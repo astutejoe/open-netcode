@@ -35,6 +35,8 @@ bool AWeapon::Fire()
 
 		firing = ammo_count > 0;
 
+		WeaponFired();
+
 		return true;
 	}
 	else if (!reloading && shot_timer <= 0.0f && ammo_count == 0)

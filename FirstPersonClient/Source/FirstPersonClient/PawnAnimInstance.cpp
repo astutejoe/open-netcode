@@ -6,15 +6,11 @@ void UPawnAnimInstance::NativeInitializeAnimation()
 
 	APawn* pawn = TryGetPawnOwner();
 
-	if (!pawn) { return; }
+	if (pawn == nullptr) { return; }
 
-	if (pawn->IsA(APlayerPawn::StaticClass()))
+	if (pawn->IsA(AOnlinePawn::StaticClass()))
 	{
-		Owner = Cast<APlayerPawn>(pawn);
-	}
-	else if (pawn->IsA(AOnlinePawn::StaticClass()))
-	{
-		RemoteOwner = Cast<AOnlinePawn>(pawn);
+		Owner = Cast<AOnlinePawn>(pawn);
 	}
 }
 
@@ -22,25 +18,14 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 {
 	Super::NativeUpdateAnimation(DeltaTime);
 
-	if (Owner)
+	if (Owner != nullptr)
 	{
 		Speed = Owner->velocity.Size();
 		Direction = CalculateDirection(Owner->velocity, FRotator::ZeroRotator);
+		bIsGrounded = Owner->grounded;
+		bIsAiming = Owner->ads;
 
 		if (Owner->weapon != nullptr)
 			bIsReloading = Owner->weapon->reloading;
-
-		bIsGrounded = Owner->grounded;
-		bIsFalling = Owner->is_falling;
-		bIsJumping = Owner->jumping;
-	}
-	else if (RemoteOwner)
-	{
-		Speed = RemoteOwner->velocity.Size();
-		Direction = CalculateDirection(RemoteOwner->velocity, FRotator::ZeroRotator);
-		bIsGrounded = RemoteOwner->grounded;
-
-		if (RemoteOwner->weapon != nullptr)
-			bIsReloading = RemoteOwner->weapon->reloading;
 	}
 }

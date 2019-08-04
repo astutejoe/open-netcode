@@ -25,6 +25,9 @@ public:
 	bool bIsReloading = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsAiming = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -34,6 +37,5 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
 private:
-	class APlayerPawn* Owner = nullptr;
-	class AOnlinePawn* RemoteOwner;
+	class AOnlinePawn* Owner = nullptr;
 };

@@ -47,6 +47,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	bool Reload();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HideMagazine();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ShowMagazine();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void WeaponFired();
+
 	float shot_timer = 0.0f;
 	bool reloading = false;
 	float reload_timer = 0.0f;

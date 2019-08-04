@@ -37,8 +37,6 @@ void AOnlinePawn::BeginPlay()
 
 	target_location = GetActorLocation();
 	target_rotation = GetActorRotation();
-
-	weapon_hipfire_location = weapon_component->RelativeLocation;
 }
 
 void AOnlinePawn::Fire()
@@ -83,13 +81,6 @@ void AOnlinePawn::Update(FVector location, FRotator rotation, float forward_velo
 	velocity = FVector(forward_velocity, side_velocity, 0.0f);
 	health = _health;
 	grounded = _isInGround;
-
-	//if ads state changed.
-	if (ads != _ads && weapon != nullptr)
-	{
-		if (_ads)
-			weapon_target_location = weapon_ads_location;
-	}
 	ads = _ads;
 }
 
@@ -105,44 +96,6 @@ void AOnlinePawn::Tick(float DeltaTime)
 	if (GetActorRotation() != target_rotation)
 	{
 		SetActorRotation(FMath::RInterpTo(GetActorRotation(), target_rotation, DeltaTime, INTERP_SPEED));
-	}
-
-	if (weapon != nullptr)
-	{
-		if (ads && !interpolate_weapon_location && !(weapon_component->RelativeLocation.Equals(weapon_target_location)))
-			interpolate_weapon_location = true;
-
-		/*if (weapon->reloading)
-		{
-			weapon_component->SetWorldLocation(mesh->GetSocketLocation("gun_socket"));
-			weapon_component->SetWorldRotation(mesh->GetSocketQuaternion("gun_socket"));
-		}
-		else */if (interpolate_weapon_location)
-		{
-			FVector weapon_relative_location = weapon_component->RelativeLocation;
-
-			weapon_component->SetRelativeLocation(FMath::VInterpTo(weapon_relative_location, weapon_target_location, DeltaTime, ADS_SPEED));
-
-			//GETTING ROTATION BACK DUE TO KNOWN BUG THAT CHANGING LOCATION AFFECTS ROTATION: https://issues.unrealengine.com/issue/UE-46037
-			//Also to get back from reloads properly
-			weapon_component->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-
-			if (weapon_relative_location.Equals(weapon_target_location))
-			{
-				interpolate_weapon_location = false;
-			}
-		}
-		else if (!ads && !(weapon_component->RelativeLocation.Equals(weapon_hipfire_location)))
-		{
-			FVector weapon_relative_location = weapon_component->RelativeLocation;
-
-			weapon_component->SetRelativeLocation(FMath::VInterpConstantTo(weapon_relative_location, weapon_hipfire_location, DeltaTime, ADS_SPEED * 2));
-
-
-			//GETTING ROTATION BACK DUE TO KNOWN BUG THAT CHANGING LOCATION AFFECTS ROTATION: https://issues.unrealengine.com/issue/UE-46037
-			//Also to get back from reloads properly
-			weapon_component->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-		}
 	}
 }
 
