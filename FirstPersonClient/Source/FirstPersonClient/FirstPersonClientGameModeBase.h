@@ -16,6 +16,7 @@ struct Object
 	int32 id;
 	uint8 class_id;
 	bool grounded;
+	bool ads;
 };
 #pragma pack(pop)
 
@@ -39,6 +40,7 @@ struct OnlinePlayerInput
 	float turn = 0.0f;
 	float turn_up = 0.0f;
 	bool jumped = false;
+	bool ads = false;
 	float delta_time = 0.0f;
 	uint32 sequence = 0;
 };

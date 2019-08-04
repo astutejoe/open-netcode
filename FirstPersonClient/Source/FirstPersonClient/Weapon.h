@@ -7,6 +7,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Weapon.generated.h"
 
+const float ADS_SPEED = 20.0f;
+
 UCLASS()
 class FIRSTPERSONCLIENT_API AWeapon : public AActor
 {

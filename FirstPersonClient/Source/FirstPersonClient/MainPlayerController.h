@@ -13,6 +13,7 @@ const float SPRINT_ACCELERATION = 2000.0f;
 const float DEACELERATION_COEFICIENT = 2.0f;
 const float BACKWARD_COEFICIENT = 2.0f;
 const float DISCREPANCY_THRESHOLD = 0.01f;
+const float ADS_FOV_DIFFERENCE = 20.0f;
 
 UCLASS()
 class FIRSTPERSONCLIENT_API AMainPlayerController : public APlayerController
@@ -33,12 +34,17 @@ public:
 	void MoveUp(float value);
 	void Turn(float value);
 	void TurnUp(float value);
+	void BeginAim();
+	void EndAim();
 	void Jump();
 	void Fire();
 	void EndFire();
 	void Reload();
 
 	FVector2D UpdateVelocity(float move_forward, float move_right, float speed, float acceleration, float DeltaTime, bool grounded, bool jumped);
+
+	float ads_camera_fov;
+	float camera_fov;
 
 	bool firing_pressed = false;
 

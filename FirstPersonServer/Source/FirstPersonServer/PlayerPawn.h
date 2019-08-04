@@ -44,6 +44,7 @@ public:
 	State state = State::Alive;
 
 	FVector velocity = FVector::ZeroVector;
+	bool ads;
 	bool grounded = false;
 	bool jumping = false;
 

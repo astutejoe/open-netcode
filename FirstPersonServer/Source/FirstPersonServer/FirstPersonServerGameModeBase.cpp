@@ -52,6 +52,8 @@ AFirstPersonServerGameModeBase::AFirstPersonServerGameModeBase()
 		objects[i].class_id = (uint8)ObjectClass::Player;
 
 		objects[i].grounded = false;
+
+		objects[i].ads = false;
 	}
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -348,6 +350,8 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 
 				last_input_sequence[player_index] = online_player_input_ided.player_input.sequence;
 
+				objects[i].ads = online_player_input_ided.player_input.ads;
+
 				float speed = SPRINT_SPEED;
 				float acceleration = SPRINT_ACCELERATION;
 
@@ -499,6 +503,7 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 
 				player_instance->velocity = FVector(objects[i].velocity[0], objects[i].velocity[1], objects[i].velocity[2]);
 
+				player_instance->ads = online_player_input_ided.player_input.ads;
 				break;
 			}
 		}
@@ -533,7 +538,10 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 
 			FVector exit_direction;
 
-			exit_direction = exit_location->GetForwardVector();
+			if (object_pawn->ads)
+				exit_direction = exit_location->GetForwardVector();
+			else
+				exit_direction = (exit_location->GetComponentRotation() + FRotator(FMath::FRandRange(-HIPFIRE_SPREAD, HIPFIRE_SPREAD), FMath::FRandRange(-HIPFIRE_SPREAD, HIPFIRE_SPREAD), 0.0f)).Vector();
 
 			FVector trace_start = exit_location->GetComponentLocation() + (exit_location->GetForwardVector() * WEAPON_LENGTH);
 			FVector trace_end = trace_start + (exit_direction * MAX_SHOT_RANGE);
@@ -678,6 +686,7 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 				objects[i].rotation[0] = player_instance->spine_reference->GetComponentRotation().Roll;
 				objects[i].grounded = player_instance->grounded;
 				objects[i].health = player_instance->health;
+				objects[i].ads = player_instance->ads;
 			}
 			break;
 		default:

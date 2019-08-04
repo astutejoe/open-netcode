@@ -17,6 +17,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* capsule;
 
@@ -39,6 +41,13 @@ public:
 	float health;
 
 	AWeapon* weapon;
+	USkeletalMeshComponent* weapon_mesh;
+
+	float camera_target_fov;
+	FVector weapon_target_location;
+	bool aiming_downsights = false;
+	FVector weapon_hipfire_location;
+	bool interpolate_weapon_location = false;
 
 	APlayerPawn();
 };

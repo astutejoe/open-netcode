@@ -46,8 +46,11 @@ void AMainPlayerController::BeginPlay()
 
 	if (!inside_navmesh)
 	{
-		PRINT_DEBUG(FString::Printf(TEXT("Invalid spawn location!")));
+		PRINT_DEBUG("Invalid spawn location!");
 	}
+
+	camera_fov = pawn->camera->FieldOfView;
+	ads_camera_fov = camera_fov - ADS_FOV_DIFFERENCE;
 }
 
 void AMainPlayerController::SetupInputComponent()
@@ -58,6 +61,8 @@ void AMainPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveRight");
 	InputComponent->BindAxis("Turn");
 	InputComponent->BindAxis("TurnUp");
+	InputComponent->BindAction("Aim", IE_Pressed, this, &AMainPlayerController::BeginAim);
+	InputComponent->BindAction("Aim", IE_Released, this, &AMainPlayerController::EndAim);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AMainPlayerController::Jump);
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AMainPlayerController::Fire);
 	InputComponent->BindAction("Fire", IE_Released, this, &AMainPlayerController::EndFire);
@@ -250,6 +255,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 		memcpy(buffer + 1, &latency, sizeof(uint32));
 
 		player_input.sequence = input_sequence;
+		player_input.ads = pawn->aiming_downsights;
 		player_input.delta_time = DeltaTime;
 
 		memcpy(buffer + UPDATE_HEADER_OFFSET, &player_input, sizeof(OnlinePlayerInput));
@@ -292,6 +298,38 @@ void AMainPlayerController::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(2, 3.f, my_object_history.object.id >= 0 ? FColor::Green : FColor::Red, FString::Printf(TEXT("Syncing: %s"), my_object_history.object.id >= 0 ? TEXT("true") : TEXT("false")), false);
 	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Blue, FString::Printf(TEXT("Latency: %d"), latency), false);
 #endif
+}
+
+void AMainPlayerController::BeginAim()
+{
+	if (pawn->weapon != nullptr && !pawn->weapon->reloading)
+	{
+		pawn->camera_target_fov = ads_camera_fov;
+
+		FVector weapon_relative_location = pawn->weapon_component->RelativeLocation;
+		FVector front_sight_location = pawn->weapon_mesh->GetSocketLocation("front_sight");
+		FTransform fps_camera_world_transform = pawn->camera->GetComponentTransform();
+		FVector front_sight_relative_location = fps_camera_world_transform.InverseTransformPosition(front_sight_location);
+
+		front_sight_relative_location.X = 0.0f;
+
+		FVector final_location = weapon_relative_location - front_sight_relative_location;
+
+		pawn->weapon_target_location = final_location;
+
+		pawn->interpolate_weapon_location = true;
+		pawn->aiming_downsights = true;
+	}
+}
+
+void AMainPlayerController::EndAim()
+{
+	pawn->camera_target_fov = camera_fov;
+	if (pawn->weapon != nullptr)
+	{
+		pawn->aiming_downsights = false;
+		pawn->interpolate_weapon_location = false;
+	}
 }
 
 void AMainPlayerController::Jump()

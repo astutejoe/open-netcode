@@ -52,6 +52,8 @@ const float CLIENT_TIMEOUT = 60.0f; //seconds
 const float WEAPON_LENGTH = 70.0f;
 const float MAX_SHOT_RANGE = 4000.0f;
 
+const float HIPFIRE_SPREAD = 3.0f; //ANGLES OF RANDOMNESS
+
 #pragma pack(push,1)
 struct Object
 {
@@ -62,6 +64,7 @@ struct Object
 	int32 id;
 	uint8 class_id;
 	bool grounded;
+	bool ads;
 };
 #pragma pack(pop)
 
@@ -73,6 +76,7 @@ struct OnlinePlayerInput
 	float turn = 0.0f;
 	float turn_up = 0.0f;
 	bool jumped = false;
+	bool ads = false;
 	float delta_time = 0.0f;
 	uint32 sequence = 0;
 };
