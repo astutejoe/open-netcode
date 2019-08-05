@@ -151,7 +151,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 				SetControlRotation(rotation);
 				pawn->SetActorRotation(rotation);
 
-				pawn->spine_reference->SetRelativeRotation(FRotator(0.0f, 0.0f, server_rotation.Roll));
+				pawn->spine_reference->SetRelativeRotation(FRotator(server_rotation.Roll, 0.0f, 0.0f));
 
 				velocity.X = my_object_history.object.velocity[0];
 				velocity.Y = my_object_history.object.velocity[1];
@@ -187,7 +187,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 					my_histories[history_position].object.position[1] = pawn->GetActorLocation().Y;
 					my_histories[history_position].object.position[2] = pawn->GetActorLocation().Z;
 
-					my_histories[history_position].object.rotation[0] = pawn->spine_reference->GetComponentRotation().Roll;
+					my_histories[history_position].object.rotation[0] = pawn->spine_reference->GetComponentRotation().Pitch;
 					my_histories[history_position].object.rotation[1] = pawn->GetActorRotation().Pitch;
 					my_histories[history_position].object.rotation[2] = pawn->GetActorRotation().Yaw;
 
@@ -213,7 +213,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 				SetControlRotation(rotation);
 				pawn->SetActorRotation(rotation);
 
-				pawn->spine_reference->SetWorldRotation(FRotator(0.0f, 0.0f, server_rotation.Roll));
+				pawn->spine_reference->SetWorldRotation(FRotator(server_rotation.Roll, 0.0f, 0.0f));
 
 				history_position++;
 				while (my_histories[history_position].sequence > my_object_history.sequence)
@@ -221,7 +221,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 					Turn(my_histories[history_position].player_input.turn);
 					TurnUp(my_histories[history_position].player_input.turn_up);
 
-					my_histories[history_position].object.rotation[0] = pawn->spine_reference->GetComponentRotation().Roll;
+					my_histories[history_position].object.rotation[0] = pawn->spine_reference->GetComponentRotation().Pitch;
 					my_histories[history_position].object.rotation[1] = pawn->GetActorRotation().Pitch;
 					my_histories[history_position].object.rotation[2] = pawn->GetActorRotation().Yaw;
 
@@ -273,7 +273,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 		my_history.object.position[1] = pawn->GetActorLocation().Y;
 		my_history.object.position[2] = pawn->GetActorLocation().Z;
 
-		my_history.object.rotation[0] = pawn->spine_reference->GetComponentRotation().Roll;
+		my_history.object.rotation[0] = pawn->spine_reference->GetComponentRotation().Pitch;
 		my_history.object.rotation[1] = pawn->GetActorRotation().Pitch;
 		my_history.object.rotation[2] = pawn->GetActorRotation().Yaw;
 
@@ -469,8 +469,8 @@ void AMainPlayerController::TurnUp(float value)
 {
 	FRotator spine_reference_rotation = pawn->spine_reference->GetComponentRotation();
 
-	spine_reference_rotation.Roll = FMath::ClampAngle(spine_reference_rotation.Roll + value, -MAX_ROTATION, MAX_ROTATION);
-	spine_reference_rotation.Pitch = 0.0f;
+	spine_reference_rotation.Pitch = FMath::ClampAngle(spine_reference_rotation.Pitch - value, -MAX_ROTATION, MAX_ROTATION);
+	spine_reference_rotation.Roll = 0.0f;
 	spine_reference_rotation.Yaw = 0.0f;
 
 	pawn->spine_reference->SetRelativeRotation(spine_reference_rotation);

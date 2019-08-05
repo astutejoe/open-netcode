@@ -7,12 +7,12 @@ APlayerPawn::APlayerPawn()
 	capsule->SetCapsuleRadius(34.0f);
 	SetRootComponent(capsule);
 
-	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	mesh->SetupAttachment(capsule);
-
 	spine_reference = CreateDefaultSubobject<USceneComponent>(TEXT("SpineReference"));
 	spine_reference->bEditableWhenInherited = true;
-	spine_reference->SetupAttachment(mesh);
+	spine_reference->SetupAttachment(capsule);
+
+	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	mesh->SetupAttachment(spine_reference);
 
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	camera->bEditableWhenInherited = true;

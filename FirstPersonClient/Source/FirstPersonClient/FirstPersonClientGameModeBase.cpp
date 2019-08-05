@@ -242,7 +242,7 @@ void AFirstPersonClientGameModeBase::Tick(float DeltaTime)
 						if (online_pawn_instance != nullptr)
 						{
 							online_pawn_instance->Update(position, rotation, objects[i].velocity[0], objects[i].velocity[1], objects[i].grounded, objects[i].health, objects[i].ads);
-							online_pawn_instance->spine_reference->SetRelativeRotation(FRotator(0.0f, 0.0f, objects[i].rotation[0]));
+							online_pawn_instance->spine_reference->SetRelativeRotation(FRotator(objects[i].rotation[0], 0.0f, 0.0f));
 						}
 
 						break;

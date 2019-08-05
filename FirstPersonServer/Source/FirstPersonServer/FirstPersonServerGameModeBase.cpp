@@ -689,7 +689,7 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 			{
 				APlayerPawn* player_instance = Cast<APlayerPawn>(objects_instances[i].instance);
 
-				objects[i].rotation[0] = player_instance->spine_reference->GetComponentRotation().Roll;
+				objects[i].rotation[0] = player_instance->spine_reference->GetComponentRotation().Pitch;
 				objects[i].grounded = player_instance->grounded;
 				objects[i].health = player_instance->health;
 				objects[i].ads = player_instance->ads;

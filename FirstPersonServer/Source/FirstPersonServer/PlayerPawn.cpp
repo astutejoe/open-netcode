@@ -9,18 +9,18 @@ APlayerPawn::APlayerPawn()
 	capsule->bDynamicObstacle = true;
 	RootComponent = capsule;
 
+	spine_reference = CreateDefaultSubobject<USceneComponent>(TEXT("SpineReference"));
+	spine_reference->SetRelativeLocation(FVector(0.f, 0.f, 14.f));
+	spine_reference->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+	spine_reference->bEditableWhenInherited = true;
+	spine_reference->SetupAttachment(capsule);
+
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
 	mesh->SetupAttachment(capsule);
 
-	spine_reference = CreateDefaultSubobject<USceneComponent>(TEXT("SpineReference"));
-	spine_reference->SetRelativeLocation(FVector(0.f, 0.f, 104.f));
-	spine_reference->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
-	spine_reference->bEditableWhenInherited = true;
-	spine_reference->SetupAttachment(mesh);
-
 	exit_location = CreateDefaultSubobject<USceneComponent>(TEXT("ExitLocation"), true);
-	exit_location->SetRelativeLocation(FVector(-22.000177, 47.999893, 36.000000));
-	exit_location->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
+	exit_location->SetRelativeLocation(FVector(29.0f, 6.0f, 36.0f));
+	exit_location->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 	exit_location->bEditableWhenInherited = true;
 	exit_location->SetupAttachment(spine_reference);
 }
@@ -72,8 +72,8 @@ void APlayerPawn::TurnUp(float value)
 	{
 		FRotator spine_reference_rotation = spine_reference->GetComponentRotation();
 
-		spine_reference_rotation.Roll = FMath::ClampAngle(spine_reference_rotation.Roll + value, -MAX_ROTATION, MAX_ROTATION);
-		spine_reference_rotation.Pitch = 0.0f;
+		spine_reference_rotation.Pitch = FMath::ClampAngle(spine_reference_rotation.Pitch - value, -MAX_ROTATION, MAX_ROTATION);
+		spine_reference_rotation.Roll = 0.0f;
 		spine_reference_rotation.Yaw = 0.0f;
 
 		spine_reference->SetRelativeRotation(spine_reference_rotation);
