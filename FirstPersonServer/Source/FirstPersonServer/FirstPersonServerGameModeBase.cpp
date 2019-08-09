@@ -352,10 +352,17 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 
 				last_input_sequence[player_index] = online_player_input_ided.player_input.sequence;
 
-				objects[i].ads = online_player_input_ided.player_input.ads;
 
-				float speed = SPRINT_SPEED;
-				float acceleration = SPRINT_ACCELERATION;
+				float speed = JOG_SPEED;
+				float acceleration = JOG_ACCELERATION;
+
+				if (online_player_input_ided.player_input.sprinting)
+				{
+					speed = SPRINT_SPEED;
+					acceleration = SPRINT_ACCELERATION;
+				}
+
+				objects[i].ads = online_player_input_ided.player_input.ads;
 
 				if (online_player_input_ided.player_input.move_forward != 0.0f)
 				{

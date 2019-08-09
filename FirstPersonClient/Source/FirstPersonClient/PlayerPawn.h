@@ -36,6 +36,7 @@ public:
 
 	FVector velocity;
 	bool jumping = false;
+	bool sprinting = false;
 	bool grounded = true;
 	bool is_falling = false;
 	float health;

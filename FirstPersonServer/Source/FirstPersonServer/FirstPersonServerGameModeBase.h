@@ -39,10 +39,12 @@ const unsigned short MAX_BUFFER = 2048; //arbitrary
 
 const unsigned short MAX_OBJECTS_HISTORY = 1000;
 
-const float SPRINT_SPEED = 1000.0f; //cm/s
-const float SPRINT_ACCELERATION = 2000.0f; //cm/s
+const float SPRINT_SPEED = 600.0f; //cm/s
+const float SPRINT_ACCELERATION = 1200.0f; //cm/s
+const float JOG_SPEED = 400.0f; //cm/s
+const float JOG_ACCELERATION = 800.0f; //cm/s
 
-const float DEACELERATION_COEFICIENT = 2.0f;
+const float DEACELERATION_COEFICIENT = 4.0f;
 const float BACKWARD_COEFICIENT = 2.0f;
 
 const uint16 DEFAULT_GAME_PORT = 3000;
@@ -76,6 +78,7 @@ struct OnlinePlayerInput
 	float turn = 0.0f;
 	float turn_up = 0.0f;
 	bool jumped = false;
+	bool sprinting = false;
 	bool ads = false;
 	float delta_time = 0.0f;
 	uint32 sequence = 0;

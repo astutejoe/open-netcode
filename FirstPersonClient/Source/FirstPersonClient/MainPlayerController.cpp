@@ -67,6 +67,8 @@ void AMainPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AMainPlayerController::Fire);
 	InputComponent->BindAction("Fire", IE_Released, this, &AMainPlayerController::EndFire);
 	InputComponent->BindAction("Reload", IE_Pressed, this, &AMainPlayerController::Reload);
+	InputComponent->BindAction("Sprint", IE_Pressed, this, &AMainPlayerController::Sprint);
+	InputComponent->BindAction("Sprint", IE_Released, this, &AMainPlayerController::Unsprint);
 }
 
 void AMainPlayerController::Tick(float DeltaTime)
@@ -98,8 +100,16 @@ void AMainPlayerController::Tick(float DeltaTime)
 	player_input.move_forward = player_input.move_forward * DeltaTime;
 	player_input.move_right = player_input.move_right * DeltaTime;
 
-	float speed = SPRINT_SPEED;
-	float acceleration = SPRINT_ACCELERATION;
+	float speed = JOG_SPEED;
+	float acceleration = JOG_ACCELERATION;
+
+	if (pawn->sprinting)
+	{
+		speed = SPRINT_SPEED;
+		acceleration = SPRINT_ACCELERATION;
+	}
+
+	player_input.sprinting = pawn->sprinting;
 
 	//Normalize and update the unormalized velocity
 	FVector2D velocity_normal = UpdateVelocity(player_input.move_forward, player_input.move_right, speed, acceleration, DeltaTime, grounded, player_input.jumped);
@@ -164,8 +174,14 @@ void AMainPlayerController::Tick(float DeltaTime)
 				history_position++;
 				while (my_histories[history_position].sequence > my_object_history.sequence)
 				{
-					float sim_speed = SPRINT_SPEED;
-					float sim_acceleration = SPRINT_ACCELERATION;
+					float sim_speed = JOG_SPEED;
+					float sim_acceleration = JOG_ACCELERATION;
+
+					if (my_histories[history_position].player_input.sprinting)
+					{
+						sim_speed = SPRINT_SPEED;
+						sim_acceleration = SPRINT_ACCELERATION;
+					}
 
 					FVector2D sim_velocity_normal = UpdateVelocity(my_histories[history_position].player_input.move_forward,
 						my_histories[history_position].player_input.move_right,
@@ -319,6 +335,7 @@ void AMainPlayerController::BeginAim()
 
 		pawn->interpolate_weapon_location = true;
 		pawn->aiming_downsights = true;
+		pawn->sprinting = false;
 	}
 }
 
@@ -339,6 +356,16 @@ void AMainPlayerController::Jump()
 		jumping = true;
 		jumped = true;
 	}
+}
+
+void AMainPlayerController::Sprint()
+{
+	pawn->sprinting = true;
+}
+
+void AMainPlayerController::Unsprint()
+{
+	pawn->sprinting = false;
 }
 
 void AMainPlayerController::Fire()

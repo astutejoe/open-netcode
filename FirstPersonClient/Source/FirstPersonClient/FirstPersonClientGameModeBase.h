@@ -40,6 +40,7 @@ struct OnlinePlayerInput
 	float turn = 0.0f;
 	float turn_up = 0.0f;
 	bool jumped = false;
+	bool sprinting = false;
 	bool ads = false;
 	float delta_time = 0.0f;
 	uint32 sequence = 0;
