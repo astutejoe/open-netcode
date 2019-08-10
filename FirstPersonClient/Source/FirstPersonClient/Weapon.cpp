@@ -2,8 +2,12 @@
 
 AWeapon::AWeapon()
 {
+	root = CreateDefaultSubobject<USceneComponent>(TEXT("CrouchCameraReference"));
+	SetRootComponent(root);
+
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	SetRootComponent(mesh);
+	mesh->SetupAttachment(root);
+	
 
 	sound_emitter = CreateDefaultSubobject<UAudioComponent>(TEXT("Shot Sound"));
 	sound_emitter->SetAutoActivate(false);

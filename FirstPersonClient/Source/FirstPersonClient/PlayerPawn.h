@@ -48,8 +48,8 @@ public:
 	AWeapon* weapon;
 	USkeletalMeshComponent* weapon_mesh;
 
-	FVector fps_camera_location;
-	FVector fps_crouch_camera_location;
+	FVector camera_location;
+	FVector crouch_camera_location;
 
 	float camera_target_fov;
 	FVector weapon_target_location;

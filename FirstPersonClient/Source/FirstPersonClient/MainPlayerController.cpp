@@ -78,8 +78,8 @@ void AMainPlayerController::Tick(float DeltaTime)
 
 	if (interpolate_camera)
 	{
-		FVector camera_relative_location = pawn->camera->RelativeLocation;
-		pawn->camera->SetRelativeLocation(FMath::VInterpTo(camera_relative_location, camera_target_location, DeltaTime, CAMERA_INTERPOLATION_SPEED));
+		FVector camera_relative_location = pawn->spine_reference->RelativeLocation;
+		pawn->spine_reference->SetRelativeLocation(FMath::VInterpConstantTo(camera_relative_location, camera_target_location, DeltaTime, CAMERA_INTERPOLATION_SPEED*80.0f));
 
 		if (camera_relative_location.Equals(camera_target_location))
 		{
@@ -395,9 +395,9 @@ void AMainPlayerController::Crouch()
 {
 	pawn->crouching = !pawn->crouching;
 	if (pawn->crouching)
-		camera_target_location = pawn->fps_crouch_camera_location;
+		camera_target_location = pawn->crouch_camera_location;
 	else
-		camera_target_location = pawn->fps_camera_location;
+		camera_target_location = pawn->camera_location;
 
 	interpolate_camera = true;
 }

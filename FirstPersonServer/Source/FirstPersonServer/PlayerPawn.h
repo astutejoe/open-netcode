@@ -21,6 +21,9 @@ class FIRSTPERSONSERVER_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -35,6 +38,9 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* exit_location;
 
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* crouch_camera_reference;
+
 	APlayerPawn();
 
 	const int respawn_time = 10.0f;
@@ -42,6 +48,9 @@ public:
 	float health = 100.0f;
 
 	State state = State::Alive;
+
+	FVector camera_location;
+	FVector crouch_camera_location;
 
 	FVector velocity = FVector::ZeroVector;
 	bool ads;

@@ -90,7 +90,6 @@ void APlayerPawn::BeginPlay()
 
 	weapon_hipfire_location = weapon_component->RelativeLocation;
 
-	fps_camera_location = camera->RelativeLocation;
-
-	fps_crouch_camera_location = crouch_camera_reference->RelativeLocation;
+	camera_location = spine_reference->RelativeLocation;
+	crouch_camera_location = crouch_camera_reference->RelativeLocation;
 }

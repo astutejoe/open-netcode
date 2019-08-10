@@ -23,6 +23,10 @@ APlayerPawn::APlayerPawn()
 	exit_location->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 	exit_location->bEditableWhenInherited = true;
 	exit_location->SetupAttachment(spine_reference);
+
+	crouch_camera_reference = CreateDefaultSubobject<USceneComponent>(TEXT("CrouchCameraReference"));
+	crouch_camera_reference->bEditableWhenInherited = true;
+	crouch_camera_reference->SetupAttachment(capsule);
 }
 
 void APlayerPawn::MoveForward(float value)
@@ -99,3 +103,10 @@ void APlayerPawn::Relive()
 	respawn_counter = respawn_time;
 }
 
+void APlayerPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	camera_location = spine_reference->RelativeLocation;
+	crouch_camera_location = crouch_camera_reference->RelativeLocation;
+}

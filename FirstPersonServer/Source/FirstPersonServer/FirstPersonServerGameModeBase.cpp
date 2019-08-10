@@ -354,6 +354,19 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 
 				last_input_sequence[player_index] = online_player_input_ided.player_input.sequence;
 
+				if (online_player_input_ided.player_input.crouching != objects[i].crouching)
+				{
+					APlayerPawn* player_instance = Cast<APlayerPawn>(objects_instances[i].instance);
+
+					if (online_player_input_ided.player_input.crouching)
+					{
+						player_instance->spine_reference->SetRelativeLocation(player_instance->crouch_camera_location);
+					}
+					else
+					{
+						player_instance->spine_reference->SetRelativeLocation(player_instance->camera_location);
+					}
+				}
 
 				float speed = JOG_SPEED;
 				float acceleration = JOG_ACCELERATION;
