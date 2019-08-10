@@ -43,6 +43,8 @@ const float SPRINT_SPEED = 600.0f; //cm/s
 const float SPRINT_ACCELERATION = 1200.0f; //cm/s
 const float JOG_SPEED = 400.0f; //cm/s
 const float JOG_ACCELERATION = 800.0f; //cm/s
+const float CROUCH_SPEED = 200.0f; //cm/s
+const float CROUCH_ACCELERATION = 400.0f; //cm/s
 
 const float DEACELERATION_COEFICIENT = 4.0f;
 const float BACKWARD_COEFICIENT = 2.0f;
@@ -67,6 +69,7 @@ struct Object
 	uint8 class_id;
 	bool grounded;
 	bool ads;
+	bool crouching;
 };
 #pragma pack(pop)
 
@@ -77,6 +80,7 @@ struct OnlinePlayerInput
 	float move_right = 0.0f;
 	float turn = 0.0f;
 	float turn_up = 0.0f;
+	bool crouching = false;
 	bool jumped = false;
 	bool sprinting = false;
 	bool ads = false;

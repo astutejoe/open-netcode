@@ -33,5 +33,6 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 		bIsGrounded = Owner->grounded;
 		bIsJumping = Owner->jumping;
+		bIsCrouching = Owner->crouching;
 	}
 }

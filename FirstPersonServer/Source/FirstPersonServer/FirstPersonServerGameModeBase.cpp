@@ -54,6 +54,8 @@ AFirstPersonServerGameModeBase::AFirstPersonServerGameModeBase()
 		objects[i].grounded = false;
 
 		objects[i].ads = false;
+
+		objects[i].crouching = false;
 	}
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -356,12 +358,18 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 				float speed = JOG_SPEED;
 				float acceleration = JOG_ACCELERATION;
 
-				if (online_player_input_ided.player_input.sprinting)
+				if (online_player_input_ided.player_input.crouching)
+				{
+					speed = CROUCH_SPEED;
+					acceleration = CROUCH_ACCELERATION;
+				}
+				else if (online_player_input_ided.player_input.sprinting)
 				{
 					speed = SPRINT_SPEED;
 					acceleration = SPRINT_ACCELERATION;
 				}
 
+				objects[i].crouching = online_player_input_ided.player_input.crouching;
 				objects[i].ads = online_player_input_ided.player_input.ads;
 
 				if (online_player_input_ided.player_input.move_forward != 0.0f)
@@ -511,8 +519,8 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 #pragma endregion
 
 				player_instance->velocity = FVector(objects[i].velocity[0], objects[i].velocity[1], objects[i].velocity[2]);
-
 				player_instance->ads = online_player_input_ided.player_input.ads;
+				player_instance->crouching = online_player_input_ided.player_input.crouching;
 				break;
 			}
 		}

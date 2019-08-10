@@ -54,12 +54,13 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads);
+	virtual void Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads, bool _crouching);
 
 	FVector target_location;
 	FRotator target_rotation;
 
 	bool grounded = true;
+	bool crouching = false;
 	float health = 100.0f;
 	FVector velocity;
 };

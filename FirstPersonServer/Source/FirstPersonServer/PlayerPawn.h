@@ -47,6 +47,7 @@ public:
 	bool ads;
 	bool grounded = false;
 	bool jumping = false;
+	bool crouching = false;
 
 	AWeapon* weapon;
 

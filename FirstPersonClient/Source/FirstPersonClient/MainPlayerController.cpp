@@ -64,6 +64,7 @@ void AMainPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Aim", IE_Pressed, this, &AMainPlayerController::BeginAim);
 	InputComponent->BindAction("Aim", IE_Released, this, &AMainPlayerController::EndAim);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AMainPlayerController::Jump);
+	InputComponent->BindAction("Crouch", IE_Pressed, this, &AMainPlayerController::Crouch);
 	InputComponent->BindAction("Fire", IE_Pressed, this, &AMainPlayerController::Fire);
 	InputComponent->BindAction("Fire", IE_Released, this, &AMainPlayerController::EndFire);
 	InputComponent->BindAction("Reload", IE_Pressed, this, &AMainPlayerController::Reload);
@@ -74,6 +75,17 @@ void AMainPlayerController::SetupInputComponent()
 void AMainPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (interpolate_camera)
+	{
+		FVector camera_relative_location = pawn->camera->RelativeLocation;
+		pawn->camera->SetRelativeLocation(FMath::VInterpTo(camera_relative_location, camera_target_location, DeltaTime, CAMERA_INTERPOLATION_SPEED));
+
+		if (camera_relative_location.Equals(camera_target_location))
+		{
+			interpolate_camera = false;
+		}
+	}
 
 	if (firing_pressed)
 	{
@@ -103,12 +115,18 @@ void AMainPlayerController::Tick(float DeltaTime)
 	float speed = JOG_SPEED;
 	float acceleration = JOG_ACCELERATION;
 
-	if (pawn->sprinting)
+	if (pawn->crouching)
+	{
+		speed = CROUCH_SPEED;
+		acceleration = CROUCH_ACCELERATION;
+	}
+	else if (pawn->sprinting)
 	{
 		speed = SPRINT_SPEED;
 		acceleration = SPRINT_ACCELERATION;
 	}
 
+	player_input.crouching = pawn->crouching;
 	player_input.sprinting = pawn->sprinting;
 
 	//Normalize and update the unormalized velocity
@@ -177,7 +195,12 @@ void AMainPlayerController::Tick(float DeltaTime)
 					float sim_speed = JOG_SPEED;
 					float sim_acceleration = JOG_ACCELERATION;
 
-					if (my_histories[history_position].player_input.sprinting)
+					if (my_histories[history_position].player_input.crouching)
+					{
+						sim_speed = CROUCH_SPEED;
+						sim_acceleration = CROUCH_ACCELERATION;
+					}
+					else if (my_histories[history_position].player_input.sprinting)
 					{
 						sim_speed = SPRINT_SPEED;
 						sim_acceleration = SPRINT_ACCELERATION;
@@ -366,6 +389,17 @@ void AMainPlayerController::Sprint()
 void AMainPlayerController::Unsprint()
 {
 	pawn->sprinting = false;
+}
+
+void AMainPlayerController::Crouch()
+{
+	pawn->crouching = !pawn->crouching;
+	if (pawn->crouching)
+		camera_target_location = pawn->fps_crouch_camera_location;
+	else
+		camera_target_location = pawn->fps_camera_location;
+
+	interpolate_camera = true;
 }
 
 void AMainPlayerController::Fire()

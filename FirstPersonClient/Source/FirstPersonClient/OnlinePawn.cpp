@@ -51,7 +51,7 @@ void AOnlinePawn::Reload()
 	PlayerReloaded();
 }
 
-void AOnlinePawn::Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads)
+void AOnlinePawn::Update(FVector location, FRotator rotation, float forward_velocity, float side_velocity, bool _isInGround, float _health, bool _ads, bool _crouching)
 {
 	target_location = location;
 	target_rotation = rotation;
@@ -59,6 +59,7 @@ void AOnlinePawn::Update(FVector location, FRotator rotation, float forward_velo
 	health = _health;
 	grounded = _isInGround;
 	ads = _ads;
+	crouching = _crouching;
 }
 
 void AOnlinePawn::Tick(float DeltaTime)

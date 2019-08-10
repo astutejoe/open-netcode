@@ -17,6 +17,7 @@ struct Object
 	uint8 class_id;
 	bool grounded;
 	bool ads;
+	bool crouching;
 };
 #pragma pack(pop)
 
@@ -39,6 +40,7 @@ struct OnlinePlayerInput
 	float move_right = 0.0f;
 	float turn = 0.0f;
 	float turn_up = 0.0f;
+	bool crouching = false;
 	bool jumped = false;
 	bool sprinting = false;
 	bool ads = false;

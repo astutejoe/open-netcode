@@ -21,6 +21,10 @@ APlayerPawn::APlayerPawn()
 	weapon_component = CreateDefaultSubobject<UChildActorComponent>(TEXT("CAGAITA")); //really sorry about this, calling it Weapon was actually giving compile errors.
 	weapon_component->bEditableWhenInherited = true;
 	weapon_component->SetupAttachment(camera);
+
+	crouch_camera_reference = CreateDefaultSubobject<USceneComponent>(TEXT("CrouchCameraReference"));
+	crouch_camera_reference->bEditableWhenInherited = true;
+	crouch_camera_reference->SetupAttachment(capsule);
 }
 
 void APlayerPawn::Tick(float DeltaTime)
@@ -85,4 +89,8 @@ void APlayerPawn::BeginPlay()
 	}
 
 	weapon_hipfire_location = weapon_component->RelativeLocation;
+
+	fps_camera_location = camera->RelativeLocation;
+
+	fps_crouch_camera_location = crouch_camera_reference->RelativeLocation;
 }

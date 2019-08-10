@@ -26,6 +26,9 @@ public:
 		bool bIsReloading = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsCrouching = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Speed = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

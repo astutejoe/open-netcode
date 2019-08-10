@@ -25,6 +25,7 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		bIsGrounded = Owner->grounded;
 		bIsAiming = Owner->ads;
 		Health = Owner->health;
+		bIsCrouching = Owner->crouching;
 		SpineOffset = Owner->spine_reference->GetComponentRotation().Pitch * -1.0f;
 
 		if (Owner->weapon != nullptr)

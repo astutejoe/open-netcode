@@ -34,8 +34,12 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UChildActorComponent* weapon_component;
 
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* crouch_camera_reference;
+
 	FVector velocity;
 	bool jumping = false;
+	bool crouching = false;
 	bool sprinting = false;
 	bool grounded = true;
 	bool is_falling = false;
@@ -43,6 +47,9 @@ public:
 
 	AWeapon* weapon;
 	USkeletalMeshComponent* weapon_mesh;
+
+	FVector fps_camera_location;
+	FVector fps_crouch_camera_location;
 
 	float camera_target_fov;
 	FVector weapon_target_location;

@@ -22,6 +22,9 @@ public:
 	bool bIsJumping = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsCrouching = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsReloading = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
