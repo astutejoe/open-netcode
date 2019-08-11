@@ -431,6 +431,7 @@ void AMainPlayerController::Reload()
 {
 	if (pawn->weapon != nullptr && pawn->weapon->Reload())
 	{
+		pawn->PlayerReloaded();
 #if ONLINE
 		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Reload, 0, nullptr);
 #endif

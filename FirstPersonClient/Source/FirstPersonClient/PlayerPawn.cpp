@@ -33,16 +33,16 @@ void APlayerPawn::Tick(float DeltaTime)
 
 	if (weapon != nullptr)
 	{
-		/*if (weapon->reloading)
+		if (weapon->reloading)
 		{
-			weapon_component->SetWorldLocation(GetMesh()->GetSocketLocation("gun_socket"));
-			weapon_component->SetWorldRotation(GetMesh()->GetSocketQuaternion("gun_socket"));
+			weapon_component->SetWorldLocation(mesh->GetSocketLocation("gun_socket"));
+			weapon_component->SetWorldRotation(mesh->GetSocketQuaternion("gun_socket"));
 
 			if (camera->FieldOfView != camera_target_fov)
 				camera->SetFieldOfView(FMath::FInterpTo(camera->FieldOfView, camera_target_fov, DeltaTime, ADS_SPEED / 2));
 
 		}
-		else */if (interpolate_weapon_location)
+		else if (interpolate_weapon_location)
 		{
 			FVector weapon_relative_location = weapon_component->RelativeLocation;
 			weapon_target_location.X = weapon_relative_location.X;
@@ -64,7 +64,6 @@ void APlayerPawn::Tick(float DeltaTime)
 		{
 			FVector weapon_relative_location = weapon_component->RelativeLocation;
 			FVector interp_location = weapon_hipfire_location;
-			interp_location.X = weapon_relative_location.X;
 
 			weapon_component->SetRelativeLocation(FMath::VInterpConstantTo(weapon_relative_location, interp_location, DeltaTime, ADS_SPEED * 2));
 

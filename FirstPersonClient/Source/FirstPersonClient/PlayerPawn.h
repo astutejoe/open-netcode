@@ -37,6 +37,9 @@ public:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* crouch_camera_reference;
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PlayerReloaded();
+
 	FVector velocity;
 	bool jumping = false;
 	bool crouching = false;
