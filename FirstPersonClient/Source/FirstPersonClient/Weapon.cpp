@@ -8,7 +8,6 @@ AWeapon::AWeapon()
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	mesh->SetupAttachment(root);
 	
-
 	sound_emitter = CreateDefaultSubobject<UAudioComponent>(TEXT("Shot Sound"));
 	sound_emitter->SetAutoActivate(false);
 	sound_emitter->SetupAttachment(mesh);
@@ -41,7 +40,8 @@ bool AWeapon::Fire()
 
 		WeaponFired();
 
-		mesh->AddLocalOffset(FVector(0.0f, -1.0f, 0.0f));
+		if (sway)
+			mesh->AddLocalOffset(FVector(0.0f, -4.0f, 0.0f));
 
 		return true;
 	}

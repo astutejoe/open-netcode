@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PlayerReloaded();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PlayerFired();
+
 	FVector velocity;
 	bool jumping = false;
 	bool crouching = false;

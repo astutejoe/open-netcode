@@ -37,7 +37,12 @@ void APlayerPawn::Tick(float DeltaTime)
 
 	if (weapon != nullptr)
 	{
-		if (aiming_downsights && !weapon_component->RelativeLocation.Equals(weapon_target_location))
+		if (weapon->reloading)
+		{
+			weapon_component->SetWorldLocation(FMath::VInterpConstantTo(weapon_component->GetComponentLocation(), mesh->GetSocketLocation("gun_socket"), DeltaTime, ADS_SPEED * 8));
+			weapon_component->SetWorldRotation(FMath::RInterpConstantTo(weapon_component->GetComponentRotation(), mesh->GetSocketQuaternion("gun_socket").Rotator(), DeltaTime, ADS_SPEED * 8));
+		}
+		else if (aiming_downsights && !weapon_component->RelativeLocation.Equals(weapon_target_location))
 		{
 			weapon_component->SetRelativeLocation(FMath::VInterpTo(weapon_component->RelativeLocation, weapon_target_location, DeltaTime, ADS_SPEED));
 		}

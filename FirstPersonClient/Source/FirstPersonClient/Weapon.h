@@ -9,7 +9,7 @@
 
 const float ADS_SPEED = 20.0f;
 
-const float RECOIL_RECOVERY_SPEED = 4.0f;
+const float RECOIL_RECOVERY_SPEED = 10.0f;
 
 UCLASS()
 class FIRSTPERSONCLIENT_API AWeapon : public AActor
@@ -66,8 +66,8 @@ public:
 	float reload_timer = 0.0f;
 	bool firing = false;
 
-	float sway_speed = 0.5f;
-	float sway_intensity = 0.3f;
+	float sway_speed = 0.1f;
+	float sway_intensity = 0.1f;
 
 	bool sway = false;
 	FVector sway_offset = FVector::ZeroVector;

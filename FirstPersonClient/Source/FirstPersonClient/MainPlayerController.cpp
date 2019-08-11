@@ -410,9 +410,9 @@ void AMainPlayerController::Fire()
 {
 	if (pawn->weapon != nullptr && pawn->weapon->Fire())
 	{
-		//pawn->PlayerFired();
-
-		//ClientPlayCameraShake(pawn->weapon->cam_shake);
+		//if aiming recoil is applied to weapon -> IK
+		if (!pawn->aiming_downsights)
+			pawn->PlayerFired();
 
 		TurnUp(-pawn->weapon->recoil);
 
@@ -434,6 +434,12 @@ void AMainPlayerController::Reload()
 	if (pawn->weapon != nullptr && pawn->weapon->Reload())
 	{
 		pawn->PlayerReloaded();
+
+		if (pawn->aiming_downsights)
+		{
+			EndAim();
+		}
+
 #if ONLINE
 		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Reload, 0, nullptr);
 #endif
