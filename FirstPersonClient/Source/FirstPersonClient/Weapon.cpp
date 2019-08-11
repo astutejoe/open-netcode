@@ -41,6 +41,8 @@ bool AWeapon::Fire()
 
 		WeaponFired();
 
+		mesh->AddLocalOffset(FVector(0.0f, -1.0f, 0.0f));
+
 		return true;
 	}
 	else if (!reloading && shot_timer <= 0.0f && ammo_count == 0)
@@ -86,6 +88,24 @@ void AWeapon::Tick(float DeltaTime)
 			reloading = false;
 			ammo_count = magazine_capacity;
 		}
+	}
+
+	if (sway && FVector(mesh->RelativeLocation.X, 0.0f, mesh->RelativeLocation.Z).Equals(sway_offset))
+	{
+		sway_offset = FMath::VRand() * sway_intensity;
+		sway_offset.Y = 0.0f;
+	}
+	else if (sway)
+	{
+		FVector mesh_relative_location = mesh->RelativeLocation;
+		mesh->SetRelativeLocation(FMath::VInterpConstantTo(mesh_relative_location, FVector(sway_offset.X, mesh_relative_location.Y, sway_offset.Z), DeltaTime, sway_speed));
+	}
+
+	//recoil recovery
+	if (!FMath::IsNearlyEqual(mesh->RelativeLocation.Y, 0.0f))
+	{
+		FVector mesh_relative_location = mesh->RelativeLocation;
+		mesh->SetRelativeLocation(FMath::VInterpTo(mesh_relative_location, FVector(mesh_relative_location.X, 0.0f, mesh_relative_location.Z), DeltaTime, RECOIL_RECOVERY_SPEED));
 	}
 }
 

@@ -79,7 +79,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 	if (interpolate_camera)
 	{
 		FVector camera_relative_location = pawn->spine_reference->RelativeLocation;
-		pawn->spine_reference->SetRelativeLocation(FMath::VInterpConstantTo(camera_relative_location, camera_target_location, DeltaTime, CAMERA_INTERPOLATION_SPEED*80.0f));
+		pawn->spine_reference->SetRelativeLocation(FMath::VInterpConstantTo(camera_relative_location, camera_target_location, DeltaTime, CAMERA_INTERPOLATION_SPEED));
 
 		if (camera_relative_location.Equals(camera_target_location))
 		{
@@ -359,6 +359,7 @@ void AMainPlayerController::BeginAim()
 		pawn->interpolate_weapon_location = true;
 		pawn->aiming_downsights = true;
 		pawn->sprinting = false;
+		pawn->weapon->sway_intensity = ADS_SWAY_INTENSITY;
 	}
 }
 
@@ -369,6 +370,7 @@ void AMainPlayerController::EndAim()
 	{
 		pawn->aiming_downsights = false;
 		pawn->interpolate_weapon_location = false;
+		pawn->weapon->sway_intensity = HIPFIRE_SWAY_INTENSITY;
 	}
 }
 

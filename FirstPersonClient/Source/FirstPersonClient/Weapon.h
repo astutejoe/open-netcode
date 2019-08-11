@@ -9,6 +9,8 @@
 
 const float ADS_SPEED = 20.0f;
 
+const float RECOIL_RECOVERY_SPEED = 4.0f;
+
 UCLASS()
 class FIRSTPERSONCLIENT_API AWeapon : public AActor
 {
@@ -63,6 +65,12 @@ public:
 	bool reloading = false;
 	float reload_timer = 0.0f;
 	bool firing = false;
+
+	float sway_speed = 0.5f;
+	float sway_intensity = 0.7f;
+
+	bool sway = true;
+	FVector sway_offset = FVector::ZeroVector;
 
 	//in order to track the ammo count we need this exposed to blueprints
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
