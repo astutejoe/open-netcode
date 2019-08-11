@@ -343,6 +343,8 @@ void AMainPlayerController::BeginAim()
 {
 	if (pawn->weapon != nullptr && !pawn->weapon->reloading)
 	{
+		pawn->weapon_component->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
 		pawn->camera_target_fov = ads_camera_fov;
 
 		FVector weapon_relative_location = pawn->weapon_component->RelativeLocation;
@@ -359,7 +361,7 @@ void AMainPlayerController::BeginAim()
 		pawn->interpolate_weapon_location = true;
 		pawn->aiming_downsights = true;
 		pawn->sprinting = false;
-		pawn->weapon->sway_intensity = ADS_SWAY_INTENSITY;
+		pawn->weapon->sway = true;
 	}
 }
 
@@ -370,7 +372,7 @@ void AMainPlayerController::EndAim()
 	{
 		pawn->aiming_downsights = false;
 		pawn->interpolate_weapon_location = false;
-		pawn->weapon->sway_intensity = HIPFIRE_SWAY_INTENSITY;
+		pawn->weapon->sway = false;
 	}
 }
 

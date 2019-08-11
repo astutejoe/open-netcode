@@ -32,47 +32,19 @@ void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (camera->FieldOfView != camera_target_fov)
+		camera->SetFieldOfView(FMath::FInterpTo(camera->FieldOfView, camera_target_fov, DeltaTime, ADS_SPEED / 2));
+
 	if (weapon != nullptr)
 	{
-		if (weapon->reloading)
+		if (aiming_downsights && !weapon_component->RelativeLocation.Equals(weapon_target_location))
 		{
-			weapon_component->SetWorldLocation(mesh->GetSocketLocation("gun_socket"));
-			weapon_component->SetWorldRotation(mesh->GetSocketQuaternion("gun_socket"));
-
-			if (camera->FieldOfView != camera_target_fov)
-				camera->SetFieldOfView(FMath::FInterpTo(camera->FieldOfView, camera_target_fov, DeltaTime, ADS_SPEED / 2));
-
+			weapon_component->SetRelativeLocation(FMath::VInterpTo(weapon_component->RelativeLocation, weapon_target_location, DeltaTime, ADS_SPEED));
 		}
-		else if (interpolate_weapon_location)
+		else if (!aiming_downsights)
 		{
-			FVector weapon_relative_location = weapon_component->RelativeLocation;
-			weapon_target_location.X = weapon_relative_location.X;
-
-			weapon_component->SetRelativeLocation(FMath::VInterpTo(weapon_relative_location, weapon_target_location, DeltaTime, ADS_SPEED));
-
-			camera->SetFieldOfView(FMath::FInterpTo(camera->FieldOfView, camera_target_fov, DeltaTime, ADS_SPEED));
-
-			//GETTING ROTATION BACK DUE TO KNOWN BUG THAT CHANGING LOCATION AFFECTS ROTATION: https://issues.unrealengine.com/issue/UE-46037
-			//Also to get back from reloads properly
-			weapon_component->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
-
-			if (weapon_relative_location.Equals(weapon_target_location))
-			{
-				interpolate_weapon_location = false;
-			}
-		}
-		else if (!aiming_downsights && !(weapon_component->RelativeLocation.Equals(weapon_hipfire_location)))
-		{
-			FVector weapon_relative_location = weapon_component->RelativeLocation;
-			FVector interp_location = weapon_hipfire_location;
-
-			weapon_component->SetRelativeLocation(FMath::VInterpConstantTo(weapon_relative_location, interp_location, DeltaTime, ADS_SPEED * 2));
-
-			camera->SetFieldOfView(FMath::FInterpTo(camera->FieldOfView, camera_target_fov, DeltaTime, ADS_SPEED / 2));
-
-			//GETTING ROTATION BACK DUE TO KNOWN BUG THAT CHANGING LOCATION AFFECTS ROTATION: https://issues.unrealengine.com/issue/UE-46037
-			//Also to get back from reloads properly
-			weapon_component->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+			weapon_component->SetWorldLocation(FMath::VInterpConstantTo(weapon_component->GetComponentLocation(), mesh->GetSocketLocation("fps_gun_socket"), DeltaTime, ADS_SPEED*8));
+			weapon_component->SetWorldRotation(FMath::RInterpConstantTo(weapon_component->GetComponentRotation(), mesh->GetSocketQuaternion("fps_gun_socket").Rotator(), DeltaTime, ADS_SPEED*8));
 		}
 	}
 }
@@ -88,8 +60,8 @@ void APlayerPawn::BeginPlay()
 		weapon_mesh = weapon->mesh;
 	}
 
-	weapon_hipfire_location = weapon_component->RelativeLocation;
-
 	camera_location = spine_reference->RelativeLocation;
 	crouch_camera_location = crouch_camera_reference->RelativeLocation;
+
+	camera_target_fov = camera->FieldOfView;
 }

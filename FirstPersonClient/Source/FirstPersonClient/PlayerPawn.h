@@ -57,7 +57,6 @@ public:
 	float camera_target_fov;
 	FVector weapon_target_location;
 	bool aiming_downsights = false;
-	FVector weapon_hipfire_location;
 	bool interpolate_weapon_location = false;
 
 	APlayerPawn();

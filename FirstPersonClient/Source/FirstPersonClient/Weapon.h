@@ -67,9 +67,9 @@ public:
 	bool firing = false;
 
 	float sway_speed = 0.5f;
-	float sway_intensity = 0.7f;
+	float sway_intensity = 0.3f;
 
-	bool sway = true;
+	bool sway = false;
 	FVector sway_offset = FVector::ZeroVector;
 
 	//in order to track the ammo count we need this exposed to blueprints

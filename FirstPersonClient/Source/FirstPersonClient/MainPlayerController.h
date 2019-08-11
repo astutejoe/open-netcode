@@ -26,9 +26,6 @@ const float ADS_FOV_DIFFERENCE = 20.0f;
 
 const float CAMERA_INTERPOLATION_SPEED = 400.0f;
 
-const float ADS_SWAY_INTENSITY = 0.3f;
-const float HIPFIRE_SWAY_INTENSITY = 0.7f;
-
 UCLASS()
 class FIRSTPERSONCLIENT_API AMainPlayerController : public APlayerController
 {
