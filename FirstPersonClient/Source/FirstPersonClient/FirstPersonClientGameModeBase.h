@@ -90,7 +90,8 @@ const unsigned short MAX_JOIN_TRIES = 10;
 UENUM(BlueprintType)
 enum class ObjectClass : uint8
 {
-	Player = 0 UMETA(DisplayName = "Player")
+	Player = 0 UMETA(DisplayName = "Player"),
+	AICharacter = 1 UMETA(DisplayName = "AICharacter")
 };
 
 enum class RPCAction : uint8

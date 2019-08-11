@@ -15,6 +15,10 @@ void UPawnAnimInstance::NativeInitializeAnimation()
 	{
 		Owner = Cast<APlayerPawn>(pawn);
 	}
+	else if (pawn->IsA(AAICharacter::StaticClass()))
+	{
+		AIOwner = Cast<AAICharacter>(pawn);
+	}
 }
 
 void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
@@ -34,5 +38,9 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		bIsGrounded = Owner->grounded;
 		bIsJumping = Owner->jumping;
 		bIsCrouching = Owner->crouching;
+	}
+	else if (AIOwner)
+	{
+		Speed = AIOwner->GetMovementComponent()->Velocity.Size();
 	}
 }

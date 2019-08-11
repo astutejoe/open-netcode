@@ -215,6 +215,7 @@ void AFirstPersonClientGameModeBase::Tick(float DeltaTime)
 					switch (objects[i].class_id)
 					{
 					case (uint8)ObjectClass::Player:
+					case (uint8)ObjectClass::AICharacter:
 						rotator = FRotator(0.0f, objects[i].rotation[2], 0.0f);
 						objects_instances[objects_instances_counter].instance = GetWorld()->SpawnActor<AOnlinePawn>(OnlinePlayer, position, rotator, ActorSpawnParameters);
 						break;
@@ -234,6 +235,7 @@ void AFirstPersonClientGameModeBase::Tick(float DeltaTime)
 					switch (objects[i].class_id)
 					{
 					case (uint8)ObjectClass::Player:
+					case (uint8)ObjectClass::AICharacter:
 					{
 						rotation = FRotator(0.0f, objects[i].rotation[2], 0.0f);
 

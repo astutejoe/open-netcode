@@ -72,6 +72,8 @@ void AFirstPersonServerGameModeBase::BeginPlay()
 
 	Async<void>(EAsyncExecution::Thread, AFirstPersonServerGameModeBase::Listener);
 
+	SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, FVector::ZeroVector, FRotator::ZeroRotator, true, -1, 100.0f);
+
 #if UE_BUILD_SHIPPING
 	GetWorld()->GetGameViewport()->bDisableWorldRendering = true;
 #endif
@@ -240,6 +242,11 @@ AActor* AFirstPersonServerGameModeBase::SpawnObject(uint8 class_id, UClass* obje
 		objects_instances[objects_counter].instance = player_instance;
 		break;
 	}
+	case (uint8)ObjectClass::AICharacter:
+	{
+		objects_instances[objects_counter].instance = GetWorld()->SpawnActor<AAICharacter>(object_class, spawn_location, spawn_rotation, ActorSpawnParameters);
+		break;
+	}
 	}
 
 	objects_instances[objects_counter].class_id = class_id;
@@ -267,6 +274,12 @@ AActor* AFirstPersonServerGameModeBase::SpawnObject(uint8 class_id, UClass* obje
 		player_instance->SpawnDefaultController();
 		player_instance->health = health;
 		player_instance->object_id = id;
+	}
+	else if (class_id == (uint8)ObjectClass::AICharacter)
+	{
+		Cast<AAICharacter>(objects_instances[objects_counter].instance)->SpawnDefaultController();
+		Cast<AAICharacter>(objects_instances[objects_counter].instance)->health = health;
+		Cast<AAICharacter>(objects_instances[objects_counter].instance)->id = object.id;
 	}
 
 	objects_counter++;
@@ -610,18 +623,29 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 			/*******************************************/
 
 			APlayerPawn* try_cast_player = nullptr;
+			AAICharacter* try_cast_character = nullptr;
 
 			bool hit_something = GetWorld()->LineTraceSingleByObjectType(hit_out, trace_start, trace_end, object_trace_params, trace_params);
 
 			if (hit_something && hit_out.Actor != nullptr && hit_out.Actor->IsValidLowLevel())
 			{
 				try_cast_player = Cast<APlayerPawn>(hit_out.Actor.Get());
+				try_cast_character = Cast<AAICharacter>(hit_out.Actor.Get());
 
 				if (try_cast_player != nullptr)
 				{
 					if (try_cast_player->health > 0.0f)
 					{
 						try_cast_player->Hit(50.0f);//pending complex damage system
+					}
+
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, hit_out.BoneName.ToString(), true);
+				}
+				else if (try_cast_character != nullptr)
+				{
+					if (try_cast_character->health > 0.0f)
+					{
+						try_cast_character->health -= 50.0f;
 					}
 
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, hit_out.BoneName.ToString(), true);
@@ -721,6 +745,17 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 				objects[i].grounded = player_instance->grounded;
 				objects[i].health = player_instance->health;
 				objects[i].ads = player_instance->ads;
+			}
+			break;
+		case (uint8)ObjectClass::AICharacter:
+			if (objects_instances[i].instance != nullptr)
+			{
+				AAICharacter* character_instance = Cast<AAICharacter>(objects_instances[i].instance);
+
+				objects[i].velocity[0] = character_instance->GetVelocity().X;
+				objects[i].velocity[1] = character_instance->GetVelocity().Y;
+				objects[i].velocity[2] = character_instance->GetVelocity().Z;
+				objects[i].health = character_instance->health;
 			}
 			break;
 		default:

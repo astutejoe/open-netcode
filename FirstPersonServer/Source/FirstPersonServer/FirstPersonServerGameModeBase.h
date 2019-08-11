@@ -4,6 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "StaticNetworking.h"
 #include "PlayerPawn.h"
+#include "AICharacter.h"
 #include "FirstPersonServerGameModeBase.generated.h"
 
 const unsigned int NULL_ID = -1;
@@ -11,7 +12,8 @@ const unsigned int NULL_ID = -1;
 UENUM(BlueprintType)
 enum class ObjectClass : uint8
 {
-	Player = 0 UMETA(DisplayName = "Player")
+	Player = 0 UMETA(DisplayName = "Player"),
+	AICharacter = 1 UMETA(DisplayName = "AICharacter")
 };
 
 enum class RPCAction : uint8
@@ -189,6 +191,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
 	UClass* PlayerPawn;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
+	UClass* AICharacter;
 
 	UPROPERTY(EditDefaultsOnly, Category = "DayDGameModeBase")
 	TMap<uint8, TSubclassOf<AWeapon>> weapons_map;

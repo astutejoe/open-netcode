@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "PlayerPawn.h"
+#include "AICharacter.h"
 #include "PawnAnimInstance.generated.h"
 
 /**
@@ -41,6 +42,7 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
 private:
-	class APlayerPawn* Owner = nullptr;
+	APlayerPawn* Owner = nullptr;
+	AAICharacter* AIOwner = nullptr;
 	
 };
