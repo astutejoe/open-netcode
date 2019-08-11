@@ -46,5 +46,6 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
 private:
-	class AOnlinePawn* Owner = nullptr;
+	AOnlinePawn* Owner = nullptr;
+	APlayerPawn* LocalOwner = nullptr;
 };

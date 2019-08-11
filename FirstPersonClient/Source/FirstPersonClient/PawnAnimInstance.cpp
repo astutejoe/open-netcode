@@ -12,6 +12,10 @@ void UPawnAnimInstance::NativeInitializeAnimation()
 	{
 		Owner = Cast<AOnlinePawn>(pawn);
 	}
+	else if (pawn->IsA(APlayerPawn::StaticClass()))
+	{
+		LocalOwner = Cast<APlayerPawn>(pawn);
+	}
 }
 
 void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
@@ -30,5 +34,18 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 		if (Owner->weapon != nullptr)
 			bIsReloading = Owner->weapon->reloading;
+	}
+	else if (LocalOwner != nullptr)
+	{
+		Speed = LocalOwner->velocity.Size();
+		Direction = CalculateDirection(LocalOwner->velocity, FRotator::ZeroRotator);
+		bIsGrounded = LocalOwner->grounded;
+		bIsAiming = LocalOwner->aiming_downsights;
+		Health = 100.0f;
+		bIsCrouching = LocalOwner->crouching;
+		SpineOffset = LocalOwner->spine_reference->GetComponentRotation().Pitch * -1.0f;
+
+		if (LocalOwner->weapon != nullptr)
+			bIsReloading = LocalOwner->weapon->reloading;
 	}
 }

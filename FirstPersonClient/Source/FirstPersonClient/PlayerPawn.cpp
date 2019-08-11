@@ -12,6 +12,7 @@ APlayerPawn::APlayerPawn()
 	spine_reference->SetupAttachment(capsule);
 
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	mesh->SetCastShadow(false);
 	mesh->SetupAttachment(spine_reference);
 
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
