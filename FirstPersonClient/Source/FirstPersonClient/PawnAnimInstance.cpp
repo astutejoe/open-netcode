@@ -38,7 +38,6 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	else if (LocalOwner != nullptr)
 	{
 		Speed = LocalOwner->velocity.Size();
-		Direction = CalculateDirection(LocalOwner->velocity, FRotator::ZeroRotator);
 		bIsGrounded = LocalOwner->grounded;
 		bIsAiming = LocalOwner->aiming_downsights;
 		Health = 100.0f;

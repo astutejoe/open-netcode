@@ -5,6 +5,7 @@
 #include "StaticNetworking.h"
 #include "PlayerPawn.h"
 #include "AICharacter.h"
+#include "MainAIController.h"
 #include "FirstPersonServerGameModeBase.generated.h"
 
 const unsigned int NULL_ID = -1;

@@ -645,7 +645,8 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 				{
 					if (try_cast_character->health > 0.0f)
 					{
-						try_cast_character->health -= 50.0f;
+						try_cast_character->Hit(50.0f);
+						Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(object_pawn);
 					}
 
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, hit_out.BoneName.ToString(), true);

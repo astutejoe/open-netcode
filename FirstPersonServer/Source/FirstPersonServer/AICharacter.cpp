@@ -1,4 +1,5 @@
 #include "AICharacter.h"
+#include "MainAIController.h"
 
 AAICharacter::AAICharacter()
 {
@@ -20,3 +21,7 @@ void AAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AAICharacter::Hit(float damage)
+{
+	health -= damage;
+}
