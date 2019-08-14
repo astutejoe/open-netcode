@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "AICharacter.h"
+#include "FirstPersonServerGameModeBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "MainAIController.generated.h"
 
@@ -25,4 +26,7 @@ public:
 	const FName target_key = "Target";
 
 	void SetTarget(APawn* new_target);
+
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	void ShootTarget();
 };

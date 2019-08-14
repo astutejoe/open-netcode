@@ -1,4 +1,5 @@
 #include "FirstPersonServerGameModeBase.h"
+#include "MainAIController.h"
 #include "NavigationSystem.h"
 #include "DrawDebugHelpers.h"
 #include "Async/Async.h"
@@ -327,6 +328,14 @@ void AFirstPersonServerGameModeBase::CleanupPlayers()
 
 			i--;
 		}
+	}
+}
+
+void AFirstPersonServerGameModeBase::ReplicateShot(int object_index)
+{
+	for (int i = 0; i < players_counter; i++)
+	{
+		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Fire, object_index, 0, nullptr, players[i].connection);
 	}
 }
 

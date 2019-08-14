@@ -5,7 +5,6 @@
 #include "StaticNetworking.h"
 #include "PlayerPawn.h"
 #include "AICharacter.h"
-#include "MainAIController.h"
 #include "FirstPersonServerGameModeBase.generated.h"
 
 const unsigned int NULL_ID = -1;
@@ -186,6 +185,7 @@ public:
 	static int32 AllocId();
 	static int GetPlayerIndexById(int32 id);
 	static int GetObjectIndexById(int32 id);
+	void ReplicateShot(int object_index);
 
 	AActor* SpawnObject(uint8 class_id, UClass* object_class, FVector spawn_location, FRotator spawn_rotation, bool grounded, int32 id, float health);
 	void DestroyObject(int object_index);
