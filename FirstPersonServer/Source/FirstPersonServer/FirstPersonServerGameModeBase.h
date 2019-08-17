@@ -5,6 +5,7 @@
 #include "StaticNetworking.h"
 #include "PlayerPawn.h"
 #include "AICharacter.h"
+#include "AISpawnPoint.h"
 #include "FirstPersonServerGameModeBase.generated.h"
 
 const unsigned int NULL_ID = -1;
@@ -199,12 +200,9 @@ public:
 	UClass* AICharacter;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
-	TSubclassOf<AActor> ai_spawn_class;
-
-	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
 	TMap<uint8, TSubclassOf<AWeapon>> weapons_map;
 
-	TArray<AActor*> ai_spawn_points;
+	TArray<AAISpawnPoint*> ai_spawn_points;
 
 private:
 	void CleanupPlayers();

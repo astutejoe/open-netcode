@@ -46,11 +46,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AIController")
 	void SetMode(EAIMode new_mode);
 
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	bool IsEnemy(AActor* actor);
+
 	const float AI_SPREAD = 5.0f;
 	const float MAX_SHOT_RANGE = 4000.0f;
 
 	TArray<APawn*> targets;
 	EAIMode mode = EAIMode::Idle;
+
+	TSet<FName> enemy_tags;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PawnDied();

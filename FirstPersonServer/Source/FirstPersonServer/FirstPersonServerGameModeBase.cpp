@@ -74,11 +74,20 @@ void AFirstPersonServerGameModeBase::BeginPlay()
 
 	Async<void>(EAsyncExecution::Thread, AFirstPersonServerGameModeBase::Listener);
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ai_spawn_class, ai_spawn_points);
+	TArray<AActor*> ai_spawn_actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAISpawnPoint::StaticClass(), ai_spawn_actors);
 
-	for (AActor* spawn_point : ai_spawn_points)
+	for (AActor* spawn_actor : ai_spawn_actors)
 	{
-		SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, spawn_point->GetActorLocation(), spawn_point->GetActorRotation(), true, -1, 100.0f);
+		AAISpawnPoint* spawn_point = Cast<AAISpawnPoint>(spawn_actor);
+
+		AActor* spawned_actor = SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, spawn_point->GetActorLocation(), spawn_point->GetActorRotation(), true, -1, 100.0f);
+
+		spawned_actor->Tags = spawn_point->Tags;
+
+		Cast<AMainAIController>(spawned_actor->GetInstigatorController())->enemy_tags = spawn_point->enemy_tags;
+
+		ai_spawn_points.Add(spawn_point);
 	}
 
 #if UE_BUILD_SHIPPING
