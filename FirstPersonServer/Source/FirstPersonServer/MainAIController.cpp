@@ -40,10 +40,10 @@ bool AMainAIController::IsEnemy(AActor* actor)
 
 void AMainAIController::SetTarget(APawn* new_target)
 {
+	target = new_target;
+
 	if (!IsValidPawn(new_target) || mode == EAIMode::Dead)
 		return;
-
-	target = new_target;
 
 	if (target != nullptr)
 	{
@@ -179,7 +179,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_player->health > 0.0f)
 			{
-				try_cast_player->Hit(20.0f); //pending complex damage system
+				try_cast_player->Hit(50.0f); //pending complex damage system
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, hit_out.BoneName.ToString(), true);
@@ -188,7 +188,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_character->health > 0.0f)
 			{
-				try_cast_character->Hit(20.0f);
+				try_cast_character->Hit(50.0f);
 				Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(pawn);
 			}
 
