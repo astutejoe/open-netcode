@@ -339,6 +339,26 @@ void AFirstPersonServerGameModeBase::ReplicateShot(int object_index)
 	}
 }
 
+void AFirstPersonServerGameModeBase::ReplicateHit(int object_id, FHitResult hit_out, FRotator hit_backward)
+{
+	//replicate shot and hit
+	for (int j = 0; j < players_counter; j++)
+	{
+		uint32 data_length = sizeof(float) * 6;
+		uint8 data[sizeof(float) * 6];
+
+		memcpy(data, &hit_out.ImpactPoint.X, sizeof(float));
+		memcpy(data + sizeof(float), &hit_out.ImpactPoint.Y, sizeof(float));
+		memcpy(data + sizeof(float) + sizeof(float), &hit_out.ImpactPoint.Z, sizeof(float));
+
+		memcpy(data + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Pitch, sizeof(float));
+		memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Yaw, sizeof(float));
+		memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Roll, sizeof(float));
+
+		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Hit, object_id, data_length, data, players[j].connection);
+	}
+}
+
 void AFirstPersonServerGameModeBase::SpawnNewPlayers()
 {
 	if (!new_players.IsEmpty())
@@ -683,7 +703,7 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 				if (players[j].id != action.object_id)
 					StaticNetworking::SendRPC((uint8)PacketType::RPC, action.action_id, action.object_id, 0, nullptr, players[j].connection);
 
-				if (try_cast_player != nullptr)
+				if (try_cast_player != nullptr || try_cast_character != nullptr)
 				{
 					uint32 data_length = sizeof(float) * 6;
 					uint8 data[sizeof(float) * 6];
@@ -698,7 +718,9 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 					memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Yaw, sizeof(float));
 					memcpy(data + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float), &hit_backward.Roll, sizeof(float));
 
-					StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Hit, try_cast_player->object_id, data_length, data, players[j].connection);
+					int32 object_id = try_cast_player != nullptr ? try_cast_player->object_id : try_cast_character->id;
+
+					StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Hit, object_id, data_length, data, players[j].connection);
 				}
 			}
 

@@ -14,10 +14,14 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* exit_location;
+
 	AAICharacter();
 
 	float health;
 	int32 id;
+	bool ads;
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

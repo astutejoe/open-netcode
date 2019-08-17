@@ -186,6 +186,7 @@ public:
 	static int GetPlayerIndexById(int32 id);
 	static int GetObjectIndexById(int32 id);
 	void ReplicateShot(int object_index);
+	void ReplicateHit(int object_id, FHitResult hit_out, FRotator hit_backward);
 
 	AActor* SpawnObject(uint8 class_id, UClass* object_class, FVector spawn_location, FRotator spawn_rotation, bool grounded, int32 id, float health);
 	void DestroyObject(int object_index);

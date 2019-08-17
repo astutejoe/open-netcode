@@ -18,7 +18,7 @@ APlayerPawn::APlayerPawn()
 	mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
 	mesh->SetupAttachment(capsule);
 
-	exit_location = CreateDefaultSubobject<USceneComponent>(TEXT("ExitLocation"), true);
+	exit_location = CreateDefaultSubobject<USceneComponent>(TEXT("ExitLocation"));
 	exit_location->SetRelativeLocation(FVector(29.0f, 6.0f, 36.0f));
 	exit_location->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 	exit_location->bEditableWhenInherited = true;

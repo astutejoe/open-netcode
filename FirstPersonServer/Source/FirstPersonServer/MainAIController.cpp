@@ -1,4 +1,6 @@
 #include "MainAIController.h"
+#include "DrawDebugHelpers.h"
+#include "Engine/Engine.h"
 
 void AMainAIController::OnPossess(APawn* InPawn)
 {
@@ -9,17 +11,96 @@ void AMainAIController::OnPossess(APawn* InPawn)
 
 void AMainAIController::SetTarget(APawn* new_target)
 {
-	GetBlackboardComponent()->SetValueAsObject(target_key, new_target);
+	target = new_target;
+
+	if (target != nullptr)
+	{
+		if (target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0)
+		{
+			return;
+		}
+
+		GetBlackboardComponent()->SetValueAsObject(target_key, target);
+		SetFocus(target, EAIFocusPriority::Default);
+		pawn->ads = true;
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(target_key);
+		ClearFocus(EAIFocusPriority::Default);
+		pawn->ads = false;
+	}
 }
 
 void AMainAIController::ShootTarget()
 {
-	Cast<AFirstPersonServerGameModeBase>(GetWorld()->GetAuthGameMode())->ReplicateShot(pawn->id);
-	float rand = FMath::FRand();
-
-	//30% chance
-	if (rand > 0.3)
+	if (target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0)
 	{
-		Cast<APlayerPawn>(GetBlackboardComponent()->GetValueAsObject(target_key))->Hit(50.0f);
+		SetTarget(nullptr);
+	}
+
+	USceneComponent* exit_location = pawn->exit_location;
+
+	FVector exit_direction = (exit_location->GetComponentRotation() + FRotator(FMath::FRandRange(-AI_SPREAD, AI_SPREAD), FMath::FRandRange(-AI_SPREAD, AI_SPREAD), 0.0f)).Vector();
+
+	FVector trace_start = exit_location->GetComponentLocation();
+	FVector trace_end = trace_start + (exit_direction * MAX_SHOT_RANGE);
+
+	FHitResult hit_out;
+
+	FCollisionObjectQueryParams object_trace_params(
+		ECC_TO_BITFIELD(ECC_WorldDynamic) |
+		ECC_TO_BITFIELD(ECC_WorldStatic) |
+		ECC_TO_BITFIELD(ECC_Pawn) |
+		ECC_TO_BITFIELD(ECC_PhysicsBody) |
+		ECC_TO_BITFIELD(ECC_Destructible)
+	);
+
+	FCollisionQueryParams trace_params(
+		FName(TEXT("FireTrace")),
+		true
+	);
+
+	APlayerPawn* try_cast_player = nullptr;
+	AAICharacter* try_cast_character = nullptr;
+
+	bool hit_something = GetWorld()->LineTraceSingleByObjectType(hit_out, trace_start, trace_end, object_trace_params, trace_params);
+
+	if (hit_something && hit_out.Actor != nullptr && hit_out.Actor->IsValidLowLevel())
+	{
+		try_cast_player = Cast<APlayerPawn>(hit_out.Actor.Get());
+		try_cast_character = Cast<AAICharacter>(hit_out.Actor.Get());
+
+		if (try_cast_player != nullptr)
+		{
+			if (try_cast_player->health > 0.0f)
+			{
+				try_cast_player->Hit(50.0f); //pending complex damage system
+			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, hit_out.BoneName.ToString(), true);
+		}
+		else if (try_cast_character != nullptr)
+		{
+			if (try_cast_character->health > 0.0f)
+			{
+				try_cast_character->Hit(50.0f);
+				Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(pawn);
+			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, hit_out.BoneName.ToString(), true);
+		}
+	}
+
+	DrawDebugLine(GetWorld(), trace_start, trace_end, FColor::Red, false, 30.0f, ESceneDepthPriorityGroup::SDPG_World, 1);
+
+	Cast<AFirstPersonServerGameModeBase>(GetWorld()->GetAuthGameMode())->ReplicateShot(pawn->id);
+
+	if (try_cast_player != nullptr || try_cast_character != nullptr)
+	{
+		int32 object_id = try_cast_player != nullptr ? try_cast_player->object_id : try_cast_character->id;
+		FRotator hit_backward = (pawn->exit_location->GetForwardVector() * -1).Rotation(); //shot direction inverted
+
+		Cast<AFirstPersonServerGameModeBase>(GetWorld()->GetAuthGameMode())->ReplicateHit(object_id, hit_out, hit_backward);
 	}
 }
