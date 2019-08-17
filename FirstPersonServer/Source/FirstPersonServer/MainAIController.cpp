@@ -47,14 +47,17 @@ void AMainAIController::SetTarget(APawn* new_target)
 
 	if (target != nullptr)
 	{
-		GetBlackboardComponent()->SetValueAsObject(target_key, target);
+		if (GetBlackboardComponent() != nullptr)
+			GetBlackboardComponent()->SetValueAsObject(target_key, target);
+
 		SetFocus(target, EAIFocusPriority::Default);
 		pawn->ads = true;
 		SetMode(EAIMode::Engaged);
 	}
 	else
 	{
-		GetBlackboardComponent()->ClearValue(target_key);
+		if (GetBlackboardComponent() != nullptr)
+			GetBlackboardComponent()->ClearValue(target_key);
 		ClearFocus(EAIFocusPriority::Default);
 		pawn->ads = false;
 		pawn->crouching = false;
@@ -65,12 +68,14 @@ void AMainAIController::SetTarget(APawn* new_target)
 
 void AMainAIController::SetMode(EAIMode new_mode)
 {
-	GetBlackboardComponent()->SetValueAsEnum(mode_key, (uint8)new_mode);
+	if (GetBlackboardComponent() != nullptr)
+		GetBlackboardComponent()->SetValueAsEnum(mode_key, (uint8)new_mode);
 	mode = new_mode;
 
 	if (new_mode == EAIMode::Dead)
 	{
-		GetBlackboardComponent()->ClearValue(target_key);
+		if (GetBlackboardComponent() != nullptr)
+			GetBlackboardComponent()->ClearValue(target_key);
 		ClearFocus(EAIFocusPriority::Default);
 		pawn->ads = false;
 		pawn->crouching = false;
@@ -179,7 +184,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_player->health > 0.0f)
 			{
-				try_cast_player->Hit(50.0f); //pending complex damage system
+				try_cast_player->Hit(20.0f); //pending complex damage system
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, hit_out.BoneName.ToString(), true);
@@ -188,7 +193,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_character->health > 0.0f)
 			{
-				try_cast_character->Hit(50.0f);
+				try_cast_character->Hit(20.0f);
 				Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(pawn);
 			}
 
