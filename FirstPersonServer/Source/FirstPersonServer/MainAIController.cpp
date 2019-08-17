@@ -64,7 +64,7 @@ void AMainAIController::SetMode(EAIMode new_mode)
 		pawn->ads = false;
 		pawn->crouching = false;
 		targets.Empty();
-		BrainComponent->StopLogic("Dead");
+		PawnDied();
 	}
 }
 

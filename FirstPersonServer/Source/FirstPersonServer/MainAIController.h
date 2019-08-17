@@ -51,4 +51,7 @@ public:
 
 	TArray<APawn*> targets;
 	EAIMode mode = EAIMode::Idle;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PawnDied();
 };
