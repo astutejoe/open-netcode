@@ -57,7 +57,7 @@ const uint16 DEFAULT_GAME_PORT = 3000;
 const float CLIENT_TIMEOUT = 60.0f; //seconds
 
 const float WEAPON_LENGTH = 70.0f;
-const float MAX_SHOT_RANGE = 4000.0f;
+const float MAX_SHOT_RANGE = 6000.0f;
 
 const float HIPFIRE_SPREAD = 3.0f; //ANGLES OF RANDOMNESS
 

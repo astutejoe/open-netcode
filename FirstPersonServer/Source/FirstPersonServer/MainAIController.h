@@ -50,7 +50,7 @@ public:
 	bool IsEnemy(AActor* actor);
 
 	const float AI_SPREAD = 5.0f;
-	const float MAX_SHOT_RANGE = 4000.0f;
+	const float MAX_SHOT_RANGE = 6000.0f;
 
 	TArray<APawn*> targets;
 	EAIMode mode = EAIMode::Idle;
