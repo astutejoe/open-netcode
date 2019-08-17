@@ -42,5 +42,6 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	else if (AIOwner)
 	{
 		Speed = AIOwner->GetMovementComponent()->Velocity.Size();
+		bIsCrouching = AIOwner->crouching;
 	}
 }

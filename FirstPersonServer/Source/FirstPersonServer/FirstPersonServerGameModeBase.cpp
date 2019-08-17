@@ -6,6 +6,7 @@
 #include "Containers/Queue.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
+#include <Runtime\Engine\Classes\Kismet\GameplayStatics.h>
 
 uint8 receive_buffer[MAX_BUFFER];
 
@@ -73,7 +74,12 @@ void AFirstPersonServerGameModeBase::BeginPlay()
 
 	Async<void>(EAsyncExecution::Thread, AFirstPersonServerGameModeBase::Listener);
 
-	SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, FVector::ZeroVector, FRotator::ZeroRotator, true, -1, 100.0f);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ai_spawn_class, ai_spawn_points);
+
+	for (AActor* spawn_point : ai_spawn_points)
+	{
+		SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, spawn_point->GetActorLocation(), spawn_point->GetActorRotation(), true, -1, 100.0f);
+	}
 
 #if UE_BUILD_SHIPPING
 	GetWorld()->GetGameViewport()->bDisableWorldRendering = true;
@@ -336,6 +342,14 @@ void AFirstPersonServerGameModeBase::ReplicateShot(int object_index)
 	for (int i = 0; i < players_counter; i++)
 	{
 		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Fire, object_index, 0, nullptr, players[i].connection);
+	}
+}
+
+void AFirstPersonServerGameModeBase::ReplicateReload(int object_index)
+{
+	for (int i = 0; i < players_counter; i++)
+	{
+		StaticNetworking::SendRPC((uint8)PacketType::RPC, (uint8)RPCAction::Reload, object_index, 0, nullptr, players[i].connection);
 	}
 }
 
@@ -788,6 +802,8 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 				objects[i].velocity[1] = character_instance->GetVelocity().Y;
 				objects[i].velocity[2] = character_instance->GetVelocity().Z;
 				objects[i].health = character_instance->health;
+				objects[i].crouching = character_instance->crouching;
+				objects[i].ads = character_instance->ads;
 			}
 			break;
 		default:

@@ -187,6 +187,7 @@ public:
 	static int GetObjectIndexById(int32 id);
 	void ReplicateShot(int object_index);
 	void ReplicateHit(int object_id, FHitResult hit_out, FRotator hit_backward);
+	void ReplicateReload(int object_index);
 
 	AActor* SpawnObject(uint8 class_id, UClass* object_class, FVector spawn_location, FRotator spawn_rotation, bool grounded, int32 id, float health);
 	void DestroyObject(int object_index);
@@ -197,8 +198,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
 	UClass* AICharacter;
 
-	UPROPERTY(EditDefaultsOnly, Category = "DayDGameModeBase")
+	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
+	TSubclassOf<AActor> ai_spawn_class;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GameDefaults")
 	TMap<uint8, TSubclassOf<AWeapon>> weapons_map;
+
+	TArray<AActor*> ai_spawn_points;
 
 private:
 	void CleanupPlayers();

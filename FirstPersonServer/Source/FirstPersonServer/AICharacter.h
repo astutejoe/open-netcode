@@ -23,6 +23,9 @@ public:
 	int32 id;
 	bool ads;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Character")
+	bool crouching;
+
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

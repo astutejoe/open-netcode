@@ -26,12 +26,22 @@ public:
 	APawn* target = nullptr;
 	const FName target_key = "Target";
 
-	UFUNCTION(BlueprintCallable, Category = "AIController")
 	void SetTarget(APawn* new_target);
+
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	void AddTarget(APawn* new_target);
+
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	void RemoveTarget(APawn* removing_target);
 
 	UFUNCTION(BlueprintCallable, Category = "AIController")
 	void ShootTarget();
 
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	void Reload();
+
 	const float AI_SPREAD = 5.0f;
 	const float MAX_SHOT_RANGE = 4000.0f;
+
+	TArray<APawn*> targets;
 };

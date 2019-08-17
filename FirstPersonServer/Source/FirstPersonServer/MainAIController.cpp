@@ -32,6 +32,64 @@ void AMainAIController::SetTarget(APawn* new_target)
 	}
 }
 
+void AMainAIController::AddTarget(APawn* new_target)
+{
+	targets.Add(new_target);
+
+	if (target == nullptr)
+	{
+		SetTarget(new_target);
+	}
+	else
+	{
+		float closest_target = FVector::Distance(pawn->GetActorLocation(), targets[0]->GetActorLocation());
+		SetTarget(targets[0]);
+
+		for (int i = 1; i < targets.Num(); i++)
+		{
+			float distance = FVector::Distance(pawn->GetActorLocation(), targets[i]->GetActorLocation());
+			if (distance < closest_target)
+			{
+				closest_target = distance;
+				SetTarget(targets[i]);
+			}
+		}
+	}
+}
+
+void AMainAIController::RemoveTarget(APawn* removing_target)
+{
+	targets.Remove(removing_target);
+
+	if (removing_target == target)
+	{
+		if (targets.Num() == 0)
+		{
+			SetTarget(nullptr);
+		}
+		else
+		{
+			float closest_target = FVector::Distance(pawn->GetActorLocation(), targets[0]->GetActorLocation());
+			SetTarget(targets[0]);
+
+			for (int i = 1; i < targets.Num(); i++)
+			{
+				float distance = FVector::Distance(pawn->GetActorLocation(), targets[i]->GetActorLocation());
+				if (distance < closest_target)
+				{
+					closest_target = distance;
+					SetTarget(targets[i]);
+				}
+			}
+		}
+	}
+}
+
+void AMainAIController::Reload()
+{
+	Cast<AFirstPersonServerGameModeBase>(GetWorld()->GetAuthGameMode())->ReplicateReload(pawn->id);
+}
+
 void AMainAIController::ShootTarget()
 {
 	if (target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0)
@@ -75,7 +133,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_player->health > 0.0f)
 			{
-				try_cast_player->Hit(50.0f); //pending complex damage system
+				try_cast_player->Hit(5.0f); //pending complex damage system
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, hit_out.BoneName.ToString(), true);
@@ -84,7 +142,7 @@ void AMainAIController::ShootTarget()
 		{
 			if (try_cast_character->health > 0.0f)
 			{
-				try_cast_character->Hit(50.0f);
+				try_cast_character->Hit(5.0f);
 				Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(pawn);
 			}
 
