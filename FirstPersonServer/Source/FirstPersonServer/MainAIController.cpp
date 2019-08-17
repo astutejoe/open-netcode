@@ -29,6 +29,8 @@ void AMainAIController::SetTarget(APawn* new_target)
 		GetBlackboardComponent()->ClearValue(target_key);
 		ClearFocus(EAIFocusPriority::Default);
 		pawn->ads = false;
+		pawn->crouching = false;
+		pawn->SetActorRotation(pawn->spawn_rotation);
 	}
 }
 

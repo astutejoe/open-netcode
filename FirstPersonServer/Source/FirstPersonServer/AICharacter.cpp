@@ -13,6 +13,7 @@ AAICharacter::AAICharacter()
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	spawn_rotation = GetActorRotation();
 }
 
 void AAICharacter::Tick(float DeltaTime)

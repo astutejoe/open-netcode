@@ -23,6 +23,8 @@ public:
 	int32 id;
 	bool ads;
 
+	FRotator spawn_rotation;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Character")
 	bool crouching;
 
