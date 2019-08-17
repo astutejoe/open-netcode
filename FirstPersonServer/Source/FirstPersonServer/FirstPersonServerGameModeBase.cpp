@@ -836,7 +836,6 @@ void AFirstPersonServerGameModeBase::DispatchWorldData()
 
 void AFirstPersonServerGameModeBase::Cleanup(float DeltaTime)
 {
-	//For now every object will be destroy upon death, we may make a switch over classes that won't inherit that behavior, while in the client-side the object will be replace by a dead one
 	for (int i = 0; i < objects_counter; i++)
 	{
 		if (objects[i].class_id == (uint8)ObjectClass::Player && objects[i].health <= 0)
@@ -848,10 +847,6 @@ void AFirstPersonServerGameModeBase::Cleanup(float DeltaTime)
 				objects_instances[i].instance->SetActorLocation(player_spawn_location, false);
 				Cast<APlayerPawn>(objects_instances[i].instance)->Relive();
 			}
-		}
-		else if (objects[i].health <= 0)
-		{
-			DestroyObject(i);
 		}
 	}
 }

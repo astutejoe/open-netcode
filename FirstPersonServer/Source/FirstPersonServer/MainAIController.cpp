@@ -1,5 +1,6 @@
 #include "MainAIController.h"
 #include "DrawDebugHelpers.h"
+#include "BrainComponent.h"
 #include "Engine/Engine.h"
 
 void AMainAIController::OnPossess(APawn* InPawn)
@@ -11,18 +12,19 @@ void AMainAIController::OnPossess(APawn* InPawn)
 
 void AMainAIController::SetTarget(APawn* new_target)
 {
+	if ((new_target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(new_target)->health <= 0) ||
+		(new_target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(new_target)->health <= 0) ||
+		mode == EAIMode::Dead)
+		return;
+
 	target = new_target;
 
 	if (target != nullptr)
 	{
-		if (target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0)
-		{
-			return;
-		}
-
 		GetBlackboardComponent()->SetValueAsObject(target_key, target);
 		SetFocus(target, EAIFocusPriority::Default);
 		pawn->ads = true;
+		SetMode(EAIMode::Engaged);
 	}
 	else
 	{
@@ -31,11 +33,33 @@ void AMainAIController::SetTarget(APawn* new_target)
 		pawn->ads = false;
 		pawn->crouching = false;
 		pawn->SetActorRotation(pawn->spawn_rotation);
+		SetMode(EAIMode::Idle);
+	}
+}
+
+void AMainAIController::SetMode(EAIMode new_mode)
+{
+	GetBlackboardComponent()->SetValueAsEnum(mode_key, (uint8)new_mode);
+	mode = new_mode;
+
+	if (new_mode == EAIMode::Dead)
+	{
+		GetBlackboardComponent()->ClearValue(target_key);
+		ClearFocus(EAIFocusPriority::Default);
+		pawn->ads = false;
+		pawn->crouching = false;
+		targets.Empty();
+		BrainComponent->StopLogic("Dead");
 	}
 }
 
 void AMainAIController::AddTarget(APawn* new_target)
 {
+	if ((new_target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(new_target)->health <= 0) ||
+		(new_target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(new_target)->health <= 0) ||
+		mode == EAIMode::Dead)
+		return;
+
 	targets.Add(new_target);
 
 	if (target == nullptr)
@@ -61,6 +85,9 @@ void AMainAIController::AddTarget(APawn* new_target)
 
 void AMainAIController::RemoveTarget(APawn* removing_target)
 {
+	if (mode == EAIMode::Dead)
+		return;
+
 	targets.Remove(removing_target);
 
 	if (removing_target == target)
@@ -94,9 +121,10 @@ void AMainAIController::Reload()
 
 void AMainAIController::ShootTarget()
 {
-	if (target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0)
+	if ((target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0) ||
+	   (target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(target)->health <= 0))
 	{
-		SetTarget(nullptr);
+		RemoveTarget(nullptr);
 	}
 
 	USceneComponent* exit_location = pawn->exit_location;

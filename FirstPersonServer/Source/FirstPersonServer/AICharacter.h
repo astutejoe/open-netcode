@@ -19,7 +19,7 @@ public:
 
 	AAICharacter();
 
-	float health;
+	float health = 100.0f;
 	int32 id;
 	bool ads;
 
@@ -27,9 +27,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Character")
 	bool crouching;
-
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Hit(float damage);
 

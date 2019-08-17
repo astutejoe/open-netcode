@@ -8,10 +8,11 @@
 #include "MainAIController.generated.h"
 
 UENUM(BlueprintType)
-enum class AIState : uint8
+enum class EAIMode : uint8
 {
-	Alive = 0 UMETA(DisplayName = "Alive"),
-	Dead = 1 UMETA(DisplayName = "Dead")
+	Idle = 0 UMETA(DisplayName = "Idle"),
+	Engaged = 1 UMETA(DisplayName = "Engaged"),
+	Dead = 2 UMETA(DisplayName = "Dead")
 };
 
 UCLASS()
@@ -25,6 +26,7 @@ public:
 	AAICharacter* pawn = nullptr;
 	APawn* target = nullptr;
 	const FName target_key = "Target";
+	const FName mode_key = "Mode";
 
 	void SetTarget(APawn* new_target);
 
@@ -40,8 +42,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AIController")
 	void Reload();
 
+	UFUNCTION(BlueprintCallable, Category = "AIController")
+	void SetMode(EAIMode new_mode);
+
 	const float AI_SPREAD = 5.0f;
 	const float MAX_SHOT_RANGE = 4000.0f;
 
 	TArray<APawn*> targets;
+	EAIMode mode = EAIMode::Idle;
 };

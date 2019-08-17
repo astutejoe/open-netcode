@@ -16,17 +16,10 @@ void AAICharacter::BeginPlay()
 	spawn_rotation = GetActorRotation();
 }
 
-void AAICharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void AAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
 void AAICharacter::Hit(float damage)
 {
 	health -= damage;
+
+	if (health <= 0)
+		controller->SetMode(EAIMode::Dead);
 }
