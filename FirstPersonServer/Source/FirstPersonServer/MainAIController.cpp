@@ -10,11 +10,26 @@ void AMainAIController::OnPossess(APawn* InPawn)
 	pawn->controller = this;
 }
 
+bool AMainAIController::IsValidPawn(APawn* pawn_to_test)
+{
+	if (pawn_to_test != nullptr)
+	{
+		if (pawn_to_test->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(pawn_to_test)->health <= 0)
+		{
+			return false;
+		}
+		else if (pawn_to_test->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(pawn_to_test)->health <= 0)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void AMainAIController::SetTarget(APawn* new_target)
 {
-	if ((new_target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(new_target)->health <= 0) ||
-		(new_target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(new_target)->health <= 0) ||
-		mode == EAIMode::Dead)
+	if (!IsValidPawn(new_target) || mode == EAIMode::Dead)
 		return;
 
 	target = new_target;
@@ -55,9 +70,7 @@ void AMainAIController::SetMode(EAIMode new_mode)
 
 void AMainAIController::AddTarget(APawn* new_target)
 {
-	if ((new_target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(new_target)->health <= 0) ||
-		(new_target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(new_target)->health <= 0) ||
-		mode == EAIMode::Dead)
+	if (!IsValidPawn(new_target) || mode == EAIMode::Dead)
 		return;
 
 	targets.Add(new_target);
@@ -121,10 +134,10 @@ void AMainAIController::Reload()
 
 void AMainAIController::ShootTarget()
 {
-	if ((target->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(target)->health <= 0) ||
-	   (target->IsA(AAICharacter::StaticClass()) && Cast<AAICharacter>(target)->health <= 0))
+	if (!IsValidPawn(target))
 	{
-		RemoveTarget(nullptr);
+		RemoveTarget(target);
+		return;
 	}
 
 	USceneComponent* exit_location = pawn->exit_location;
@@ -136,14 +149,6 @@ void AMainAIController::ShootTarget()
 
 	FHitResult hit_out;
 
-	FCollisionObjectQueryParams object_trace_params(
-		ECC_TO_BITFIELD(ECC_WorldDynamic) |
-		ECC_TO_BITFIELD(ECC_WorldStatic) |
-		ECC_TO_BITFIELD(ECC_Pawn) |
-		ECC_TO_BITFIELD(ECC_PhysicsBody) |
-		ECC_TO_BITFIELD(ECC_Destructible)
-	);
-
 	FCollisionQueryParams trace_params(
 		FName(TEXT("FireTrace")),
 		true
@@ -152,7 +157,7 @@ void AMainAIController::ShootTarget()
 	APlayerPawn* try_cast_player = nullptr;
 	AAICharacter* try_cast_character = nullptr;
 
-	bool hit_something = GetWorld()->LineTraceSingleByObjectType(hit_out, trace_start, trace_end, object_trace_params, trace_params);
+	bool hit_something = GetWorld()->LineTraceSingleByChannel(hit_out, trace_start, trace_end, ECollisionChannel::ECC_Visibility, trace_params);
 
 	if (hit_something && hit_out.Actor != nullptr && hit_out.Actor->IsValidLowLevel())
 	{

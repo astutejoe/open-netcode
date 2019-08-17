@@ -38,10 +38,12 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		bIsGrounded = Owner->grounded;
 		bIsJumping = Owner->jumping;
 		bIsCrouching = Owner->crouching;
+		Health = Owner->health;
 	}
 	else if (AIOwner)
 	{
 		Speed = AIOwner->GetMovementComponent()->Velocity.Size();
 		bIsCrouching = AIOwner->crouching;
+		Health = AIOwner->health;
 	}
 }

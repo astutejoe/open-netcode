@@ -634,14 +634,6 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 
 			FHitResult hit_out;
 
-			FCollisionObjectQueryParams object_trace_params(
-				ECC_TO_BITFIELD(ECC_WorldDynamic) |
-				ECC_TO_BITFIELD(ECC_WorldStatic) |
-				ECC_TO_BITFIELD(ECC_Pawn) |
-				ECC_TO_BITFIELD(ECC_PhysicsBody) |
-				ECC_TO_BITFIELD(ECC_Destructible)
-			);
-
 			FCollisionQueryParams trace_params(
 				FName(TEXT("FireTrace")),
 				true
@@ -668,7 +660,7 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 			APlayerPawn* try_cast_player = nullptr;
 			AAICharacter* try_cast_character = nullptr;
 
-			bool hit_something = GetWorld()->LineTraceSingleByObjectType(hit_out, trace_start, trace_end, object_trace_params, trace_params);
+			bool hit_something = GetWorld()->LineTraceSingleByChannel(hit_out, trace_start, trace_end, ECollisionChannel::ECC_Visibility, trace_params);
 
 			if (hit_something && hit_out.Actor != nullptr && hit_out.Actor->IsValidLowLevel())
 			{

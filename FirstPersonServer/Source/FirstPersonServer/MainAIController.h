@@ -28,6 +28,7 @@ public:
 	const FName target_key = "Target";
 	const FName mode_key = "Mode";
 
+	bool IsValidPawn(APawn* pawn_to_test);
 	void SetTarget(APawn* new_target);
 
 	UFUNCTION(BlueprintCallable, Category = "AIController")
