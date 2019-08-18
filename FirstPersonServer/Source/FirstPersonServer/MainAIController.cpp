@@ -2,6 +2,7 @@
 #include "DrawDebugHelpers.h"
 #include "BrainComponent.h"
 #include "Engine/Engine.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void AMainAIController::OnPossess(APawn* InPawn)
 {
@@ -158,10 +159,12 @@ void AMainAIController::ShootTarget()
 
 	USceneComponent* exit_location = pawn->exit_location;
 
-	FVector exit_direction = (exit_location->GetComponentRotation() + FRotator(FMath::FRandRange(-AI_SPREAD, AI_SPREAD), FMath::FRandRange(-AI_SPREAD, AI_SPREAD), 0.0f)).Vector();
+	
+
+	FVector target_direction = (UKismetMathLibrary::FindLookAtRotation(exit_location->GetComponentLocation(), target->GetActorLocation()) + FRotator(FMath::FRandRange(-AI_SPREAD, AI_SPREAD), FMath::FRandRange(-AI_SPREAD, AI_SPREAD), 0.0f)).Vector();
 
 	FVector trace_start = exit_location->GetComponentLocation();
-	FVector trace_end = trace_start + (exit_direction * MAX_SHOT_RANGE);
+	FVector trace_end = trace_start + (target_direction * MAX_SHOT_RANGE);
 
 	FHitResult hit_out;
 
@@ -201,7 +204,7 @@ void AMainAIController::ShootTarget()
 		}
 	}
 
-	DrawDebugLine(GetWorld(), trace_start, trace_end, FColor::Red, false, 30.0f, ESceneDepthPriorityGroup::SDPG_World, 1);
+	DrawDebugLine(GetWorld(), trace_start, hit_something ? hit_out.Location : trace_end, hit_something ? (try_cast_player != nullptr || try_cast_character != nullptr ? FColor::Green : FColor::Blue) : FColor::Red, false, 30.0f, ESceneDepthPriorityGroup::SDPG_World, 1);
 
 	Cast<AFirstPersonServerGameModeBase>(GetWorld()->GetAuthGameMode())->ReplicateShot(pawn->id);
 

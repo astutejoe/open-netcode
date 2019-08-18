@@ -708,7 +708,7 @@ void AFirstPersonServerGameModeBase::ResolveActions()
 
 			/***************************************/
 
-			DrawDebugLine(GetWorld(), trace_start, trace_end, FColor::Red, false, 30.0f, ESceneDepthPriorityGroup::SDPG_World, 1);
+			DrawDebugLine(GetWorld(), trace_start, hit_something ? hit_out.Location : trace_end, hit_something ? (try_cast_player != nullptr || try_cast_character != nullptr ? FColor::Green : FColor::Blue) : FColor::Red, false, 30.0f, ESceneDepthPriorityGroup::SDPG_World, 1);
 
 			Cast<APlayerPawn>(objects_instances[object_index].instance)->TurnUp(-object_pawn->weapon->recoil);
 
@@ -784,7 +784,7 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 		switch (objects_instances[i].class_id)
 		{
 		case (uint8)ObjectClass::Player:
-			if (objects_instances[i].instance != nullptr)
+			if (objects_instances[i].instance != nullptr && objects_instances[i].instance->IsValidLowLevel())
 			{
 				APlayerPawn* player_instance = Cast<APlayerPawn>(objects_instances[i].instance);
 
@@ -795,7 +795,7 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 			}
 			break;
 		case (uint8)ObjectClass::AICharacter:
-			if (objects_instances[i].instance != nullptr)
+			if (objects_instances[i].instance != nullptr && objects_instances[i].instance->IsValidLowLevel())
 			{
 				AAICharacter* character_instance = Cast<AAICharacter>(objects_instances[i].instance);
 
