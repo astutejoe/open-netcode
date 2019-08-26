@@ -5,6 +5,7 @@
 #include "AICharacter.h"
 #include "FirstPersonServerGameModeBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "MainAIController.generated.h"
 
 UENUM(BlueprintType)
@@ -27,9 +28,17 @@ public:
 	APawn* target = nullptr;
 	const FName target_key = "Target";
 	const FName mode_key = "Mode";
+	const FName destination_key = "Destination";
 
 	bool IsValidPawn(APawn* pawn_to_test);
 	void SetTarget(APawn* new_target);
+	void SetBehavior();
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI Defaults")
+	UBehaviorTree* attacking_behavior_tree;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI Defaults")
+	UBehaviorTree* defending_behavior_tree;
 
 	UFUNCTION(BlueprintCallable, Category = "AIController")
 	void AddTarget(APawn* new_target);
@@ -48,6 +57,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AIController")
 	bool IsEnemy(AActor* actor);
+
+	void SetDestination(FVector destination);
 
 	const float AI_SPREAD = 10.0f;
 	const float MAX_SHOT_RANGE = 6000.0f;

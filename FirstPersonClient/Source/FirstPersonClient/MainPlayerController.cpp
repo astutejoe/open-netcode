@@ -51,6 +51,7 @@ void AMainPlayerController::BeginPlay()
 
 	camera_fov = pawn->camera->FieldOfView;
 	ads_camera_fov = camera_fov - ADS_FOV_DIFFERENCE;
+	sprint_camera_fov = camera_fov - SPRINT_FOV_DIFFERENCE;
 }
 
 void AMainPlayerController::SetupInputComponent()
@@ -388,11 +389,13 @@ void AMainPlayerController::Jump()
 void AMainPlayerController::Sprint()
 {
 	pawn->sprinting = true;
+	pawn->camera_target_fov = sprint_camera_fov;
 }
 
 void AMainPlayerController::Unsprint()
 {
 	pawn->sprinting = false;
+	pawn->camera_target_fov = camera_fov;
 }
 
 void AMainPlayerController::Crouch()

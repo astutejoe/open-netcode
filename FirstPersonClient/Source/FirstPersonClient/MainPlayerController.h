@@ -23,6 +23,7 @@ const float BACKWARD_COEFICIENT = 2.0f;
 const float DISCREPANCY_THRESHOLD = 0.01f;
 
 const float ADS_FOV_DIFFERENCE = 20.0f;
+const float SPRINT_FOV_DIFFERENCE = -10.0f;
 
 const float CAMERA_INTERPOLATION_SPEED = 400.0f;
 
@@ -58,6 +59,7 @@ public:
 	FVector2D UpdateVelocity(float move_forward, float move_right, float speed, float acceleration, float DeltaTime, bool grounded, bool jumped);
 
 	float ads_camera_fov;
+	float sprint_camera_fov;
 	float camera_fov;
 
 	FVector camera_target_location;

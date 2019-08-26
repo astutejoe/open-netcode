@@ -11,9 +11,19 @@ void AMainAIController::OnPossess(APawn* InPawn)
 	pawn->controller = this;
 }
 
+void AMainAIController::SetBehavior()
+{
+	if (pawn->Tags.Find("attacking") != INDEX_NONE)
+		RunBehaviorTree(attacking_behavior_tree);
+	else
+		RunBehaviorTree(defending_behavior_tree);
+
+	SetMode(EAIMode::Engaged);
+}
+
 bool AMainAIController::IsValidPawn(APawn* pawn_to_test)
 {
-	if (pawn_to_test != nullptr)
+	if (pawn_to_test != nullptr && pawn_to_test->IsValidLowLevel())
 	{
 		if (pawn_to_test->IsA(APlayerPawn::StaticClass()) && Cast<APlayerPawn>(pawn_to_test)->health <= 0)
 		{
@@ -23,6 +33,10 @@ bool AMainAIController::IsValidPawn(APawn* pawn_to_test)
 		{
 			return false;
 		}
+	}
+	else
+	{
+		return false;
 	}
 
 	return true;
@@ -67,6 +81,11 @@ void AMainAIController::SetTarget(APawn* new_target)
 	}
 }
 
+void AMainAIController::SetDestination(FVector destination)
+{
+	GetBlackboardComponent()->SetValueAsVector(destination_key, destination);
+}
+
 void AMainAIController::SetMode(EAIMode new_mode)
 {
 	if (GetBlackboardComponent() != nullptr)
@@ -81,6 +100,7 @@ void AMainAIController::SetMode(EAIMode new_mode)
 		pawn->ads = false;
 		pawn->crouching = false;
 		targets.Empty();
+		BrainComponent->StopLogic("Dead");
 		PawnDied();
 	}
 }
@@ -159,7 +179,7 @@ void AMainAIController::ShootTarget()
 
 	USceneComponent* exit_location = pawn->exit_location;
 
-	
+	exit_location->SetWorldRotation(UKismetMathLibrary::FindLookAtRotation(exit_location->GetComponentLocation(), target->GetActorLocation()));
 
 	FVector target_direction = (UKismetMathLibrary::FindLookAtRotation(exit_location->GetComponentLocation(), target->GetActorLocation()) + FRotator(FMath::FRandRange(-AI_SPREAD, AI_SPREAD), FMath::FRandRange(-AI_SPREAD, AI_SPREAD), 0.0f)).Vector();
 
@@ -194,7 +214,7 @@ void AMainAIController::ShootTarget()
 		}
 		else if (try_cast_character != nullptr)
 		{
-			if (try_cast_character->health > 0.0f)
+			if (try_cast_character->health > 0.0f && try_cast_character->Tags[0] != pawn->Tags[0])
 			{
 				try_cast_character->Hit(20.0f);
 				Cast<AMainAIController>(try_cast_character->GetController())->SetTarget(pawn);

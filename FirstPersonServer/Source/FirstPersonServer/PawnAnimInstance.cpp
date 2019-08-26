@@ -42,6 +42,7 @@ void UPawnAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	}
 	else if (AIOwner)
 	{
+		SpineOffset = AIOwner->exit_location->GetComponentRotation().Pitch * -1.0f;
 		Speed = AIOwner->GetMovementComponent()->Velocity.Size();
 		bIsCrouching = AIOwner->crouching;
 		Health = AIOwner->health;

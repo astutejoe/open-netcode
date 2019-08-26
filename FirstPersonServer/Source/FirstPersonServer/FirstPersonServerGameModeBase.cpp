@@ -81,11 +81,15 @@ void AFirstPersonServerGameModeBase::BeginPlay()
 	{
 		AAISpawnPoint* spawn_point = Cast<AAISpawnPoint>(spawn_actor);
 
-		AActor* spawned_actor = SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, spawn_point->GetActorLocation(), spawn_point->GetActorRotation(), true, -1, 100.0f);
+		FVector spawn_location = spawn_point->GetActorLocation() + (spawn_point->Tags.Find("attacking") == INDEX_NONE ? FVector::ZeroVector : (spawn_point->GetActorForwardVector() * -5000 + spawn_point->GetActorUpVector() * 200));
+
+		AActor* spawned_actor = SpawnObject((uint8)ObjectClass::AICharacter, AICharacter, spawn_location, spawn_point->GetActorRotation(), true, -1, 100.0f);
 
 		spawned_actor->Tags = spawn_point->Tags;
 
 		Cast<AMainAIController>(spawned_actor->GetInstigatorController())->enemy_tags = spawn_point->enemy_tags;
+		Cast<AMainAIController>(spawned_actor->GetInstigatorController())->SetBehavior();
+		Cast<AMainAIController>(spawned_actor->GetInstigatorController())->SetDestination(spawn_point->GetActorLocation());
 
 		ai_spawn_points.Add(spawn_point);
 	}
@@ -556,7 +560,7 @@ void AFirstPersonServerGameModeBase::ResolvePlayerInput()
 
 				const float GRAVITY = -980.f;
 
-				objects[i].velocity[2] += GRAVITY * online_player_input_ided.player_input.delta_time * 2.0f;
+				objects[i].velocity[2] += GRAVITY * online_player_input_ided.player_input.delta_time * 2.0f; //*2.0f = unrealistic but more gamery
 
 				if (player_instance->grounded && online_player_input_ided.player_input.jumped)
 				{
@@ -799,6 +803,7 @@ void AFirstPersonServerGameModeBase::UpdateWorldArray()
 			{
 				AAICharacter* character_instance = Cast<AAICharacter>(objects_instances[i].instance);
 
+				objects[i].rotation[0] = character_instance->exit_location->GetComponentRotation().Pitch;
 				objects[i].velocity[0] = character_instance->GetVelocity().X;
 				objects[i].velocity[1] = character_instance->GetVelocity().Y;
 				objects[i].velocity[2] = character_instance->GetVelocity().Z;
